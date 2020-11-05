@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
-#include "CAFF.h"
 
 using namespace std;
 

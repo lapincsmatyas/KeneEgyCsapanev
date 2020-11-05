@@ -67,10 +67,10 @@ RM = "C:\Program Files\JetBrains\CLion 2020.2.4\bin\cmake\win\bin\cmake.exe" -E 
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = C:\Users\lapincsmatyas\bme\szamitogep_biztonsag\caff_parser
+CMAKE_SOURCE_DIR = C:\Users\lapincsmatyas\bme\szamitogep_biztonsag\KeneEgyCsapanev\caff_parser
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = C:\Users\lapincsmatyas\bme\szamitogep_biztonsag\caff_parser\cmake-build-debug
+CMAKE_BINARY_DIR = C:\Users\lapincsmatyas\bme\szamitogep_biztonsag\KeneEgyCsapanev\caff_parser\cmake-build-debug
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -99,9 +99,9 @@ edit_cache/fast: edit_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\lapincsmatyas\bme\szamitogep_biztonsag\caff_parser\cmake-build-debug\CMakeFiles C:\Users\lapincsmatyas\bme\szamitogep_biztonsag\caff_parser\cmake-build-debug\CMakeFiles\progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\lapincsmatyas\bme\szamitogep_biztonsag\KeneEgyCsapanev\caff_parser\cmake-build-debug\CMakeFiles C:\Users\lapincsmatyas\bme\szamitogep_biztonsag\KeneEgyCsapanev\caff_parser\cmake-build-debug\CMakeFiles\progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\lapincsmatyas\bme\szamitogep_biztonsag\caff_parser\cmake-build-debug\CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start C:\Users\lapincsmatyas\bme\szamitogep_biztonsag\KeneEgyCsapanev\caff_parser\cmake-build-debug\CMakeFiles 0
 .PHONY : all
 
 # The main clean target
@@ -142,114 +142,6 @@ caff_parser/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\caff_parser.dir\build.make CMakeFiles/caff_parser.dir/build
 .PHONY : caff_parser/fast
 
-src/Animation.obj: src/Animation.cpp.obj
-
-.PHONY : src/Animation.obj
-
-# target to build an object file
-src/Animation.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\caff_parser.dir\build.make CMakeFiles/caff_parser.dir/src/Animation.cpp.obj
-.PHONY : src/Animation.cpp.obj
-
-src/Animation.i: src/Animation.cpp.i
-
-.PHONY : src/Animation.i
-
-# target to preprocess a source file
-src/Animation.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\caff_parser.dir\build.make CMakeFiles/caff_parser.dir/src/Animation.cpp.i
-.PHONY : src/Animation.cpp.i
-
-src/Animation.s: src/Animation.cpp.s
-
-.PHONY : src/Animation.s
-
-# target to generate assembly for a file
-src/Animation.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\caff_parser.dir\build.make CMakeFiles/caff_parser.dir/src/Animation.cpp.s
-.PHONY : src/Animation.cpp.s
-
-src/CAFF.obj: src/CAFF.cpp.obj
-
-.PHONY : src/CAFF.obj
-
-# target to build an object file
-src/CAFF.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\caff_parser.dir\build.make CMakeFiles/caff_parser.dir/src/CAFF.cpp.obj
-.PHONY : src/CAFF.cpp.obj
-
-src/CAFF.i: src/CAFF.cpp.i
-
-.PHONY : src/CAFF.i
-
-# target to preprocess a source file
-src/CAFF.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\caff_parser.dir\build.make CMakeFiles/caff_parser.dir/src/CAFF.cpp.i
-.PHONY : src/CAFF.cpp.i
-
-src/CAFF.s: src/CAFF.cpp.s
-
-.PHONY : src/CAFF.s
-
-# target to generate assembly for a file
-src/CAFF.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\caff_parser.dir\build.make CMakeFiles/caff_parser.dir/src/CAFF.cpp.s
-.PHONY : src/CAFF.cpp.s
-
-src/Credits.obj: src/Credits.cpp.obj
-
-.PHONY : src/Credits.obj
-
-# target to build an object file
-src/Credits.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\caff_parser.dir\build.make CMakeFiles/caff_parser.dir/src/Credits.cpp.obj
-.PHONY : src/Credits.cpp.obj
-
-src/Credits.i: src/Credits.cpp.i
-
-.PHONY : src/Credits.i
-
-# target to preprocess a source file
-src/Credits.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\caff_parser.dir\build.make CMakeFiles/caff_parser.dir/src/Credits.cpp.i
-.PHONY : src/Credits.cpp.i
-
-src/Credits.s: src/Credits.cpp.s
-
-.PHONY : src/Credits.s
-
-# target to generate assembly for a file
-src/Credits.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\caff_parser.dir\build.make CMakeFiles/caff_parser.dir/src/Credits.cpp.s
-.PHONY : src/Credits.cpp.s
-
-src/Header.obj: src/Header.cpp.obj
-
-.PHONY : src/Header.obj
-
-# target to build an object file
-src/Header.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\caff_parser.dir\build.make CMakeFiles/caff_parser.dir/src/Header.cpp.obj
-.PHONY : src/Header.cpp.obj
-
-src/Header.i: src/Header.cpp.i
-
-.PHONY : src/Header.i
-
-# target to preprocess a source file
-src/Header.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\caff_parser.dir\build.make CMakeFiles/caff_parser.dir/src/Header.cpp.i
-.PHONY : src/Header.cpp.i
-
-src/Header.s: src/Header.cpp.s
-
-.PHONY : src/Header.s
-
-# target to generate assembly for a file
-src/Header.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\caff_parser.dir\build.make CMakeFiles/caff_parser.dir/src/Header.cpp.s
-.PHONY : src/Header.cpp.s
-
 src/main.obj: src/main.cpp.obj
 
 .PHONY : src/main.obj
@@ -286,18 +178,6 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... caff_parser
-	@echo ... src/Animation.obj
-	@echo ... src/Animation.i
-	@echo ... src/Animation.s
-	@echo ... src/CAFF.obj
-	@echo ... src/CAFF.i
-	@echo ... src/CAFF.s
-	@echo ... src/Credits.obj
-	@echo ... src/Credits.i
-	@echo ... src/Credits.s
-	@echo ... src/Header.obj
-	@echo ... src/Header.i
-	@echo ... src/Header.s
 	@echo ... src/main.obj
 	@echo ... src/main.i
 	@echo ... src/main.s

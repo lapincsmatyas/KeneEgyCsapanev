@@ -1,8 +1,4 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/caff_parser.dir/src/Animation.cpp.obj"
-  "CMakeFiles/caff_parser.dir/src/CAFF.cpp.obj"
-  "CMakeFiles/caff_parser.dir/src/Credits.cpp.obj"
-  "CMakeFiles/caff_parser.dir/src/Header.cpp.obj"
   "CMakeFiles/caff_parser.dir/src/main.cpp.obj"
   "caff_parser.exe"
   "caff_parser.exe.manifest"

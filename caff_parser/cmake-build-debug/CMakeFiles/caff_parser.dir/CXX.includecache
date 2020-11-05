@@ -6,21 +6,7 @@
 
 #IncludeRegexTransform: 
 
-C:/Users/lapincsmatyas/bme/szamitogep_biztonsag/caff_parser/src/Animation.h
-
-C:/Users/lapincsmatyas/bme/szamitogep_biztonsag/caff_parser/src/CAFF.h
-Header.h
-C:/Users/lapincsmatyas/bme/szamitogep_biztonsag/caff_parser/src/Header.h
-Credits.h
-C:/Users/lapincsmatyas/bme/szamitogep_biztonsag/caff_parser/src/Credits.h
-Animation.h
-C:/Users/lapincsmatyas/bme/szamitogep_biztonsag/caff_parser/src/Animation.h
-
-C:/Users/lapincsmatyas/bme/szamitogep_biztonsag/caff_parser/src/Credits.h
-
-C:/Users/lapincsmatyas/bme/szamitogep_biztonsag/caff_parser/src/Header.h
-
-C:/Users/lapincsmatyas/bme/szamitogep_biztonsag/caff_parser/src/main.cpp
+C:/Users/lapincsmatyas/bme/szamitogep_biztonsag/KeneEgyCsapanev/caff_parser/src/main.cpp
 iostream
 -
 fstream
@@ -28,5 +14,5 @@ fstream
 cstring
 -
 CAFF.h
-C:/Users/lapincsmatyas/bme/szamitogep_biztonsag/caff_parser/src/CAFF.h
+C:/Users/lapincsmatyas/bme/szamitogep_biztonsag/KeneEgyCsapanev/caff_parser/src/CAFF.h
 
