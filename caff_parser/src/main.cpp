@@ -14,20 +14,25 @@ struct BITMAPFILEHEADER {
     uint16_t reserved2{0};
     uint32_t offset_data{0};
 };
-struct BITMAPINFOHEADER{
+struct BITMAPINFOHEADER {
     uint32_t size{0};
     int32_t width{0};
     int32_t height{0};
     uint16_t planes{1};
     uint16_t bit_count{24};
     int32_t compression{0};
-    uint32_t size_image{ 0 };                // 0 - for uncompressed images
-    int32_t x_pixels_per_meter{ 0 };
-    int32_t y_pixels_per_meter{ 0 };
-    uint32_t colors_used{ 0 };               // No. color indexes in the color table. Use 0 for the max number of colors allowed by bit_count
-    uint32_t colors_important{ 0 };
+    uint32_t size_image{0};                // 0 - for uncompressed images
+    int32_t x_pixels_per_meter{0};
+    int32_t y_pixels_per_meter{0};
+    uint32_t colors_used{
+            0};               // No. color indexes in the color table. Use 0 for the max number of colors allowed by bit_count
+    uint32_t colors_important{0};
 };
 #pragma pack( pop )
+
+void handleError(string e) {
+    throw e;
+}
 
 //Helper functions to convert bytes to integers or longs
 unsigned long byteArrayToLong_8(char *bytes) {
@@ -37,13 +42,14 @@ unsigned long byteArrayToLong_8(char *bytes) {
     }
     return result;
 }
-unsigned short byteArrayToInt_2(char *bytes) {
+
+unsigned short byteArrayToInt_2(unsigned char *bytes) {
     unsigned short result = (((bytes[1] & 0xFF) << 8) | (bytes[0] & 0xFF));
     return result;
 }
 
 //BMP generation
-void writeHeader(ostream& out, unsigned int width, unsigned int height){
+void writeHeader(ostream &out, unsigned int width, unsigned int height) {
     //TODO: ha nem 4-gyel osztható a szélesség, akkor +0-kat kell hozzáfűzni (same in english)
     if (width % 4 != 0) {
         cerr << "ERROR: There is a windows-imposed requirement on BMP that the width be a multiple of 4." << endl;
@@ -53,7 +59,7 @@ void writeHeader(ostream& out, unsigned int width, unsigned int height){
     }
 
     BITMAPFILEHEADER tWBFH{};
-    tWBFH.file_size = (14 + 40 + (width*height*3));
+    tWBFH.file_size = (14 + 40 + (width * height * 3));
     tWBFH.offset_data = 14 + 40;
 
     BITMAPINFOHEADER tW2BH{};
@@ -61,101 +67,120 @@ void writeHeader(ostream& out, unsigned int width, unsigned int height){
     tW2BH.width = width;
     tW2BH.height = -height;
 
-    out.write((char*)(&tWBFH),sizeof(BITMAPFILEHEADER));
-    out.write((char*)(&tW2BH),sizeof(BITMAPINFOHEADER));
+    out.write((char *) (&tWBFH), sizeof(BITMAPFILEHEADER));
+    out.write((char *) (&tW2BH), sizeof(BITMAPINFOHEADER));
 }
-void generateBmpFromCiff(ifstream &rf, unsigned int width, unsigned int height, int index){
+
+//TODO: make it a separate function to collect bmp data
+void generateBmpFromCiff(ifstream &rf, unsigned int width, unsigned int height) {
     cout << endl << "*   BMP generation   *" << endl;
 
-    int number_of_pixels = width*height;
+    int number_of_pixels = width * height;
     cout << "Starting BMP generation" << endl;
-    cout << "Width: " << width << ", Height: " << height << ", Number of pixels: " << number_of_pixels << ", number of components: " << number_of_pixels * 3 << endl;
+    cout << "Width: " << width << ", Height: " << height << ", Number of pixels: " << number_of_pixels
+         << ", number of components: " << number_of_pixels * 3 << endl;
 
     ofstream ofs;
     string filename = "ciff.bmp";
     ofs.open(filename);
     writeHeader(ofs, width, height);
 
-    for(int i = 0; i < height * width; i++) {
+    for (int i = 0; i < height * width; i++) {
 
-            char blue;
-            rf.read((char *) &blue, 1);
+        char blue;
+        rf.read((char *) &blue, 1);
 
-            char green;
-            rf.read((char *) &green, 1);
+        char green;
+        rf.read((char *) &green, 1);
 
-            char red;
-            rf.read((char *) &red, 1);
+        char red;
+        rf.read((char *) &red, 1);
 
-            ofs << red << green << blue;
+        ofs << red << green << blue;
     }
 
     ofs.close();
 }
 
 //parser for the CIFF part of file
-void parseCiff(ifstream &rf, int index) {
-    int read_bytes = 0;
+void parseCiff(ifstream &rf) {
+    int header_read_bytes_begin = rf.tellg();
+
     cout << endl << "*   CIFF   *" << endl;
     char ciff_header_magic[5];
-    rf.read((char *) ciff_header_magic, 4); read_bytes += 4;
+    rf.read((char *) ciff_header_magic, 4);
     ciff_header_magic[4] = '\0';
 
     cout << "CIFF magic: " << ciff_header_magic << endl;
-    if(strcmp(ciff_header_magic, "CIFF") != 0){
-        //TODO: error
+    if (strcmp(ciff_header_magic, "CIFF") != 0) {
+        handleError("CIFF magic is not CIFF");
     }
 
     char header_size_array[8];
-    rf.read((char *) header_size_array, 8); ; read_bytes += 8;
+    rf.read((char *) header_size_array, 8);
     unsigned long header_size = byteArrayToLong_8(header_size_array);
 
     cout << "Size of CIFF header: " << header_size << endl;
 
     char content_size_array[8];
-    rf.read((char *) content_size_array, 8); ; read_bytes += 8;
+    rf.read((char *) content_size_array, 8);
     unsigned long content_size = byteArrayToLong_8(content_size_array);
-    //TODO: check if this is the real content size
 
     cout << "Size of CIFF content: " << content_size << endl;
 
     char width_array[8];
-    rf.read((char *) width_array, 8); ; read_bytes += 8;
+    rf.read((char *) width_array, 8);
     unsigned long width = byteArrayToLong_8(width_array);
 
     cout << "Width of CIFF: " << width << endl;
 
     char height_array[8];
-    rf.read((char *) height_array, 8); read_bytes += 8;
+    rf.read((char *) height_array, 8);
     unsigned long height = byteArrayToLong_8(height_array);
 
     cout << "Height of CIFF: " << height << endl;
 
-    // if (width * height *3 != content_size) error
+    if((width * height * 3) != content_size){
+        handleError("Invalid content size or width and size given");
+    }
 
     string caption;
     char act_char;
-    rf.read((char *) &act_char, 1); read_bytes++;
-    while(act_char != '\n') {
+    rf.read((char *) &act_char, 1);
+    while (((int)rf.tellg() - header_read_bytes_begin) < header_size && act_char != '\n') {
         caption += act_char;
-        rf.read((char *) &act_char, 1); read_bytes++;
+        rf.read((char *) &act_char, 1);
+    }
+    if(act_char != '\n'){
+        handleError("Caption does not contain the end character");
     }
     cout << "Caption of CIFF: " << caption << endl;
 
     string tags;
-    rf.read((char *) &act_char, 1); read_bytes++;
-    while(read_bytes < header_size){
+    rf.read((char *) &act_char, 1);
+    while (((int)rf.tellg() - header_read_bytes_begin) < header_size) {
         tags += act_char;
-        rf.read((char *) &act_char, 1); read_bytes++;
+        rf.read((char *) &act_char, 1);
     }
+    if(act_char != '\0'){
+        handleError("Invalid end of tags");
+    }
+
     cout << "Tags of CIFF: " << tags << endl;
+
     //TODO: (optional) make it an array of tags
 
-    generateBmpFromCiff(rf, width, height, index);
+    int begin = rf.tellg();
+    generateBmpFromCiff(rf, width, height);
+    int end = rf.tellg();
+
+    if(end - begin != content_size){
+        handleError("Not valid size of bmp read");
+    }
 }
 
 //parser for an animation block
-void parseAnimation(ifstream &rf, int index) {
+void parseAnimation(ifstream &rf) {
     cout << "************" << endl;
     cout << "*   ANIM   *" << endl;
     cout << "************" << endl << endl;
@@ -165,30 +190,63 @@ void parseAnimation(ifstream &rf, int index) {
 
     cout << "Duration of CIFF in milliseconds: " << duration << endl;
 
-    parseCiff(rf, index);
+    parseCiff(rf);
+}
+
+void validateDate(unsigned int year, unsigned int month, unsigned int day, unsigned int hour, unsigned int minute) {
+    if(year < 1987 || year > 2020){
+        handleError("Invalid year");
+    }
+
+    if(month <= 0 || month > 12){
+        handleError("Invalid month");
+    }
+
+    if (((month == 1) || (month == 3) || (month == 5) || (month == 7) ||
+        (month == 8) || (month == 10) || (month == 12)) && day > 31) {
+        handleError("This month has only 31 days");
+    }
+
+    if ( ((month == 4) || (month == 6) || (month == 9) || (month == 11)) && day > 30) {
+        handleError("This month has only 30 days");
+    } else if (((month == 2) && (year % 4 == 0)) && day > 29) {
+        handleError("This month has only 29 days in leap years");
+    } else if (((month == 2) && (year % 4 != 0)) && day > 28) {
+        handleError("This month has only 28 days");
+    };
+
+    if(hour < 0 || hour > 24) {
+        handleError("Invalid hour");
+    }
+
+    if(minute < 0 || minute >= 60){
+        handleError("Invalid minute");
+    }
 }
 
 //parser for credits block
-void parseCredits(ifstream &rf, unsigned long length) {
+void parseCredits(ifstream &rf) {
+    int begin = rf.tellg();
+
     cout << "************" << endl;
     cout << "*  CREDITS *" << endl;
     cout << "************" << endl << endl;
 
     //TODO: use unsigned char everywhere
-    char create_Y_array[2];
-    rf.read((char *) create_Y_array, 2); length -= 2;
+    unsigned char create_Y_array[2];
+    rf.read((char *) create_Y_array, 2);
 
-    char create_M_char;
-    rf.read((char *) &create_M_char, 1);  length -= 1;
+    unsigned char create_M_char;
+    rf.read((char *) &create_M_char, 1);
 
-    char create_D_char;
-    rf.read((char *) &create_D_char, 1);  length -= 1;
+    unsigned char create_D_char;
+    rf.read((char *) &create_D_char, 1);
 
-    char create_h_char;
-    rf.read((char *) &create_h_char, 1);  length -= 1;
+    unsigned char create_h_char;
+    rf.read((char *) &create_h_char, 1);
 
-    char create_m_char;
-    rf.read((char *) &create_m_char, 1);  length -= 1;
+    unsigned char create_m_char;
+    rf.read((char *) &create_m_char, 1);
 
     unsigned int create_M = (int) create_M_char;
     unsigned int create_D = (int) create_D_char;
@@ -196,41 +254,43 @@ void parseCredits(ifstream &rf, unsigned long length) {
     unsigned int create_m = (int) create_m_char;
 
     unsigned short create_Y = byteArrayToInt_2(create_Y_array);
-    //todo: check if valid dates
+
+    validateDate(create_Y, create_M, create_D, create_h, create_m);
 
     cout << "Date of creation: " << create_Y << "." << create_M << "." << create_D << " " << create_h << ":" << create_m
          << endl;
 
     char creator_length_array[8];
-    rf.read((char *) &creator_length_array, 8);  length -= 8;
+    rf.read((char *) &creator_length_array, 8);
     unsigned long creator_length = byteArrayToLong_8(creator_length_array);
     cout << "Size of creator name: " << creator_length << endl;
-    //TODO check length
 
     char creator[creator_length + 1];
-    rf.read((char *) creator, creator_length);  length -= creator_length;
+    rf.read((char *) creator, creator_length);
     creator[creator_length] = '\0';
     cout << "Creator of CAFF: " << creator << endl;
 
-    if(length != 0){
-        //TODO error
+    int end = rf.tellg();
+    if ((end - begin) != (creator_length + 8 + 6)) {
+        handleError("Length of credits was invalid");
     }
 }
 
 //parser for header block
-unsigned long parseHeaderBlock(ifstream &rf){
+unsigned long parseHeaderBlock(ifstream &rf) {
     unsigned char block_id_char;
     rf.read((char *) &block_id_char, 1);
     int block_id = (int) block_id_char;
 
-    if(block_id != 1) {
-        //TODO: error
+    if (block_id != 1) {
+        handleError("The id of header was not 1");
     }
 
     char block_length_array[8];
     rf.read((char *) block_length_array, 8);
     unsigned long block_length = byteArrayToLong_8(block_length_array);
-    //TODO: check if block_length number of bytes were read before next block
+
+    unsigned long read_bytes_data = 0;
 
     cout << "************" << endl;
     cout << "*  HEADER  *" << endl;
@@ -238,32 +298,50 @@ unsigned long parseHeaderBlock(ifstream &rf){
 
     char header_magic[5];
     rf.read((char *) header_magic, 4);
+    read_bytes_data += 4;
     header_magic[4] = '\0';
 
     cout << "Header magic: " << header_magic << endl;
 
-    if(strcmp(header_magic, "CAFF") != 0){
-        //TODO: error
+    if (strcmp(header_magic, "CAFF") != 0) {
+        handleError("Magic in header was not CAFF");
     }
 
     char header_size_array[8];
     rf.read((char *) &header_size_array, 8);
+    read_bytes_data += 8;
     unsigned long header_size = byteArrayToLong_8(header_size_array);
     cout << "Size of header: " << header_size << endl;
 
     char num_anim_array[8];
     rf.read((char *) &num_anim_array, 8);
+    read_bytes_data += 8;
     unsigned long num_anim = byteArrayToLong_8(num_anim_array);
     cout << "Number of CIFFs in animation: " << num_anim << endl;
+
+    if (read_bytes_data != block_length) {
+        handleError("Size of header block was not the number of bytes read");
+    } else if (read_bytes_data != header_size) {
+        handleError("Size of header was not the number of bytes read");
+    }
 
     return num_anim;
 }
 
 //parser for a generic block
-void parseBlock(ifstream &rf, int index) {
+int parseBlock(ifstream &rf, int index, bool credits_read) {
+    int begin = rf.tellg();
     unsigned char block_id_char;
     rf.read((char *) &block_id_char, 1);
-    int block_id = (int) block_id_char;
+    unsigned int block_id = (unsigned int) block_id_char;
+
+    if (!(block_id == 1 || block_id == 2 || block_id == 3)) {
+        handleError("Invalid block id");
+    }
+
+    if (credits_read && block_id == 2) {
+        handleError("Multiple credits blocks in file");
+    }
 
     char block_length_array[8];
     rf.read((char *) block_length_array, 8);
@@ -275,35 +353,61 @@ void parseBlock(ifstream &rf, int index) {
 
     switch ((int) block_id) {
         case 2:
-            parseCredits(rf, block_length);
+            parseCredits(rf);
             break;
         case 3:
-            parseAnimation(rf, index);
-            break;
-        default:
-            //todo invalid id
+            parseAnimation(rf);
             break;
     }
+    int end = rf.tellg();
+
+    //check if block has the size specified in block length
+    if ((end - begin - 8 - 1) != block_length) {
+        handleError("Length of block not valid");
+    }
+
+    return block_id;
 }
 
 int main() {
-    ifstream rf("../caff-files/1.caff", ios::out | ios::binary);
+    ifstream rf("../caff-files/2.caff", ios::out | ios::binary);
     if (!rf) {
         cout << "Cannot open file!" << endl;
         return 1;
     }
 
-    //Header parsing
-    //This is always the first block and contains the number of CIFF-s in the file
-    unsigned int num_anim = parseHeaderBlock(rf);
+    try {
+        //Header parsing
+        //This is always the first block and contains the number of CIFF-s in the file
+        unsigned int num_anim = parseHeaderBlock(rf);
 
-    //Parse rest of file, which contains blocks in an unspecified order
+        //Parse rest of file, which contains blocks in an unspecified order
+        bool credits_read = false;
+        int animations_read = 0;
 
-    for(int i = 0; i < num_anim + 1; i++){
-        parseBlock(rf, i);
+        for (int i = 0; animations_read < num_anim && (i < num_anim + 1); i++) {
+            int type = parseBlock(rf, i, credits_read);
+            if (type == 2) {
+                credits_read = true;
+            } else if (type == 3) {
+                animations_read++;
+            }
+        }
+        if (!credits_read) {
+            handleError("The file does not contain credits block");
+        }
+
+        if(rf.peek() != EOF){
+            handleError("The file has additional invalid content");
+        }
+
+    } catch (string& e) {
+        cout << endl << "******** ERROR ********" << endl;
+        cout << "An error was caught:" << endl;
+        cout << e << endl;
+        cout << "***********************" << endl;
     }
 
-    //TODO: biztos hogy num_anim mennyiségű blokkot olvastunk, amiben szerepel a credits
 
     return 0;
 }
