@@ -44,7 +44,7 @@ unsigned short byteArrayToInt_2(char *bytes) {
 
 //BMP generation
 void writeHeader(ostream& out, unsigned int width, unsigned int height){
-    //TODO: ha nem 4-gyel osztható a szélesség, akkor +0-kat kell hozzáfűzni
+    //TODO: ha nem 4-gyel osztható a szélesség, akkor +0-kat kell hozzáfűzni (same in english)
     if (width % 4 != 0) {
         cerr << "ERROR: There is a windows-imposed requirement on BMP that the width be a multiple of 4." << endl;
         cerr << "Your width does not meet this requirement, hence this will fail.  You can fix this" << endl;
