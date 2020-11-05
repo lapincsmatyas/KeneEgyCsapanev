@@ -1,0 +1,3 @@
+C:/Users/lapincsmatyas/bme/szamitogep_biztonsag/caff_parser/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/Users/lapincsmatyas/bme/szamitogep_biztonsag/caff_parser/cmake-build-debug/CMakeFiles/caff_parser.dir
+C:/Users/lapincsmatyas/bme/szamitogep_biztonsag/caff_parser/cmake-build-debug/CMakeFiles/edit_cache.dir
