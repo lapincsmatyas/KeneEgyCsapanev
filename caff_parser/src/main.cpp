@@ -16,7 +16,6 @@ public:
     std::vector<char> pixels{0};
 };
 
-Ciff ciff{};
 
 //structures for BMP headers
 #pragma pack( push, 1 )
@@ -183,7 +182,7 @@ void parseCiff(ifstream &rf) {
     if(end - begin != content_size){
         handleError("Not valid size of bmp read");
     }
-
+    /*
     if(ciff.header_size == 0) {
         ciff.content_size = content_size;
         ciff.header_size = header_size;
@@ -193,6 +192,7 @@ void parseCiff(ifstream &rf) {
         ciff.caption = caption;
         ciff.pixels = temp_array;
     }
+     */
 }
 
 //parser for an animation block
@@ -419,6 +419,9 @@ int main(int argc, char *argv[]) {
             handleError("The file has additional invalid content");
         }
 
+
+
+        Ciff ciff{};
         generateBmpFromCiff(ciff);
 
     } catch (string& e) {
@@ -427,10 +430,10 @@ int main(int argc, char *argv[]) {
         cout << e << endl;
         cout << "***********************" << endl;
     }
-
+    /*
     ciff.pixels.clear();
     ciff.caption.clear();
     ciff.tags.clear();
-
+    */
     return 0;
 }
