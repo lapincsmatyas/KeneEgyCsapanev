@@ -16,7 +16,7 @@ public:
     std::vector<char> pixels{0};
 };
 
-static Ciff ciff{};
+Ciff ciff{};
 
 //structures for BMP headers
 #pragma pack( push, 1 )
@@ -427,6 +427,10 @@ int main(int argc, char *argv[]) {
         cout << e << endl;
         cout << "***********************" << endl;
     }
+
+    ciff.pixels.clear();
+    ciff.caption.clear();
+    ciff.tags.clear();
 
     return 0;
 }
