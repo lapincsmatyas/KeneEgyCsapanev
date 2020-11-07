@@ -5,28 +5,26 @@
 using namespace std;
 
 //structures for BMP headers
-//TODO: credit
 #pragma pack( push, 1 )
 struct BITMAPFILEHEADER {
-    uint16_t file_type{0x4D42};
-    uint32_t file_size{0};
-    uint16_t reserved1{0};
-    uint16_t reserved2{0};
-    uint32_t offset_data{0};
+    unsigned short file_type{0x4D42};
+    unsigned int file_size{0};
+    unsigned short reserved1{0};
+    unsigned short reserved2{0};
+    unsigned int offset_data{0};
 };
 struct BITMAPINFOHEADER {
-    uint32_t size{0};
-    int32_t width{0};
-    int32_t height{0};
-    uint16_t planes{1};
-    uint16_t bit_count{24};
-    int32_t compression{0};
-    uint32_t size_image{0};                // 0 - for uncompressed images
-    int32_t x_pixels_per_meter{0};
-    int32_t y_pixels_per_meter{0};
-    uint32_t colors_used{
-            0};               // No. color indexes in the color table. Use 0 for the max number of colors allowed by bit_count
-    uint32_t colors_important{0};
+    unsigned int size{0};
+    int width{0};
+    int height{0};
+    unsigned short planes{1};
+    unsigned short bit_count{24};
+    int compression{0};
+    unsigned int size_image{0};
+    int x_pixels_per_meter{0};
+    int y_pixels_per_meter{0};
+    unsigned int colors_used{0};
+    unsigned int colors_important{0};
 };
 #pragma pack( pop )
 
@@ -35,7 +33,7 @@ void handleError(string e) {
 }
 
 //Helper functions to convert bytes to integers or longs
-unsigned long byteArrayToLong_8(char *bytes) {
+unsigned long byteArrayToLong_8(const char *bytes) {
     unsigned long result = 0;
     for (unsigned int i = 0; i < 8; i++) {
         result |= (bytes[i] & 0xFF) << (8 * i);
@@ -43,60 +41,46 @@ unsigned long byteArrayToLong_8(char *bytes) {
     return result;
 }
 
-unsigned short byteArrayToInt_2(unsigned char *bytes) {
+unsigned short byteArrayToInt_2(const unsigned char *bytes) {
     unsigned short result = (((bytes[1] & 0xFF) << 8) | (bytes[0] & 0xFF));
     return result;
-}
-
-//BMP generation
-void writeHeader(ostream &out, unsigned int width, unsigned int height) {
-    //TODO: ha nem 4-gyel osztható a szélesség, akkor +0-kat kell hozzáfűzni (same in english)
-    if (width % 4 != 0) {
-        cerr << "ERROR: There is a windows-imposed requirement on BMP that the width be a multiple of 4." << endl;
-        cerr << "Your width does not meet this requirement, hence this will fail.  You can fix this" << endl;
-        cerr << "by increasing the width to a multiple of 4." << endl;
-        exit(1);
-    }
-
-    BITMAPFILEHEADER tWBFH{};
-    tWBFH.file_size = (14 + 40 + (width * height * 3));
-    tWBFH.offset_data = 14 + 40;
-
-    BITMAPINFOHEADER tW2BH{};
-    tW2BH.size = 40;
-    tW2BH.width = width;
-    tW2BH.height = -height;
-
-    out.write((char *) (&tWBFH), sizeof(BITMAPFILEHEADER));
-    out.write((char *) (&tW2BH), sizeof(BITMAPINFOHEADER));
 }
 
 //TODO: make it a separate function to collect bmp data
 void generateBmpFromCiff(ifstream &rf, unsigned int width, unsigned int height) {
     cout << endl << "*   BMP generation   *" << endl;
 
-    int number_of_pixels = width * height;
-    cout << "Starting BMP generation" << endl;
-    cout << "Width: " << width << ", Height: " << height << ", Number of pixels: " << number_of_pixels
-         << ", number of components: " << number_of_pixels * 3 << endl;
-
     ofstream ofs;
     string filename = "ciff.bmp";
     ofs.open(filename);
-    writeHeader(ofs, width, height);
 
-    for (int i = 0; i < height * width; i++) {
+    BITMAPFILEHEADER bitmapfileheader{};
+    bitmapfileheader.file_size = (sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + (width * height * 3));
+    bitmapfileheader.offset_data = (sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER));
 
-        char blue;
-        rf.read((char *) &blue, 1);
+    BITMAPINFOHEADER bitmapinfoheader{};
+    bitmapinfoheader.size = sizeof(BITMAPINFOHEADER);
+    bitmapinfoheader.width = width;
+    bitmapinfoheader.height = -height;
 
-        char green;
-        rf.read((char *) &green, 1);
+    ofs.write((char *) (&bitmapfileheader), sizeof(BITMAPFILEHEADER));
+    ofs.write((char *) (&bitmapinfoheader), sizeof(BITMAPINFOHEADER));
 
-        char red;
-        rf.read((char *) &red, 1);
+    int pad = 0;
+    if ((width * 3) % 4 != 0) pad = 4 - ((width * 3) % 4);
 
-        ofs << red << green << blue;
+    for (int i = 0; i < height; i++) {
+        for(int j = 0; j < width; j++){
+
+            char blue, green, red;
+
+            rf.read((char *) &blue, 1);
+            rf.read((char *) &green, 1);
+            rf.read((char *) &red, 1);
+
+            ofs << red << green << blue;
+        }
+        for(int padding = 0; padding < pad; padding++) ofs << 0x00;
     }
 
     ofs.close();
@@ -370,7 +354,7 @@ int parseBlock(ifstream &rf, int index, bool credits_read) {
 }
 
 int main() {
-    ifstream rf("../caff-files/2.caff", ios::out | ios::binary);
+    ifstream rf("../caff-files/1.caff", ios::out | ios::binary);
     if (!rf) {
         cout << "Cannot open file!" << endl;
         return 1;
