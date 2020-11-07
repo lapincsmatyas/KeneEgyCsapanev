@@ -1,8 +1,11 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
+#include "ciff.h"
 
 using namespace std;
+
+Ciff ciff{};
 
 //structures for BMP headers
 #pragma pack( push, 1 )
@@ -47,7 +50,7 @@ unsigned short byteArrayToInt_2(const unsigned char *bytes) {
 }
 
 //TODO: make it a separate function to collect bmp data
-void generateBmpFromCiff(ifstream &rf, unsigned int width, unsigned int height) {
+void generateBmpFromCiff(Ciff ciff) {
     cout << endl << "*   BMP generation   *" << endl;
 
     ofstream ofs;
@@ -55,35 +58,45 @@ void generateBmpFromCiff(ifstream &rf, unsigned int width, unsigned int height) 
     ofs.open(filename);
 
     BITMAPFILEHEADER bitmapfileheader{};
-    bitmapfileheader.file_size = (sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + (width * height * 3));
+    bitmapfileheader.file_size = (sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + (ciff.width * ciff.height * 3));
     bitmapfileheader.offset_data = (sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER));
 
     BITMAPINFOHEADER bitmapinfoheader{};
     bitmapinfoheader.size = sizeof(BITMAPINFOHEADER);
-    bitmapinfoheader.width = width;
-    bitmapinfoheader.height = -height;
+    bitmapinfoheader.width = ciff.width;
+    bitmapinfoheader.height = -ciff.height;
 
     ofs.write((char *) (&bitmapfileheader), sizeof(BITMAPFILEHEADER));
     ofs.write((char *) (&bitmapinfoheader), sizeof(BITMAPINFOHEADER));
 
     int pad = 0;
-    if ((width * 3) % 4 != 0) pad = 4 - ((width * 3) % 4);
+    if ((ciff.width * 3) % 4 != 0) {
+        pad = 4 - ((ciff.width * 3) % 4);
+    }
 
-    for (int i = 0; i < height; i++) {
-        for(int j = 0; j < width; j++){
-
-            char blue, green, red;
-
-            rf.read((char *) &blue, 1);
-            rf.read((char *) &green, 1);
-            rf.read((char *) &red, 1);
-
-            ofs << red << green << blue;
+    for (int i = 0; i < ciff.height; i++) {
+        for(int j = 0; j < ciff.width*3; j++){
+            ofs << ciff.pixels[i * (ciff.width*3) + j];
         }
         for(int padding = 0; padding < pad; padding++) ofs << 0x00;
     }
 
     ofs.close();
+}
+
+vector<char> createPixelArray(ifstream &rf, unsigned int width, unsigned int height){
+    vector<char> pixel_array;
+    char act[3] = {0,0,0};
+    for (int i = 0; i < height * width; i++) {
+            rf.read((char *) &act[0], 1);
+            rf.read((char *) &act[1], 1);
+            rf.read((char *) &act[2], 1);
+
+            pixel_array.push_back(act[0]);
+            pixel_array.push_back(act[1]);
+            pixel_array.push_back(act[2]);
+    }
+    return pixel_array;
 }
 
 //parser for the CIFF part of file
@@ -152,29 +165,35 @@ void parseCiff(ifstream &rf) {
 
     cout << "Tags of CIFF: " << tags << endl;
 
-    //TODO: (optional) make it an array of tags
-
     int begin = rf.tellg();
-    generateBmpFromCiff(rf, width, height);
+    vector<char> temp_array = createPixelArray(rf, width, height);
     int end = rf.tellg();
 
     if(end - begin != content_size){
         handleError("Not valid size of bmp read");
     }
+
+    if(ciff.header_size == 0) {
+        ciff.content_size = content_size;
+        ciff.header_size = header_size;
+        ciff.width = width;
+        ciff.height = height;
+        ciff.tags = tags;
+        ciff.caption = caption;
+        ciff.pixels = temp_array;
+    }
 }
 
 //parser for an animation block
 void parseAnimation(ifstream &rf) {
-    cout << "************" << endl;
     cout << "*   ANIM   *" << endl;
-    cout << "************" << endl << endl;
     char duration_array[8];
     rf.read((char *) duration_array, 8);
     unsigned long duration = byteArrayToLong_8(duration_array);
 
     cout << "Duration of CIFF in milliseconds: " << duration << endl;
 
-    parseCiff(rf);
+    return parseCiff(rf);
 }
 
 void validateDate(unsigned int year, unsigned int month, unsigned int day, unsigned int hour, unsigned int minute) {
@@ -212,9 +231,7 @@ void validateDate(unsigned int year, unsigned int month, unsigned int day, unsig
 void parseCredits(ifstream &rf) {
     int begin = rf.tellg();
 
-    cout << "************" << endl;
     cout << "*  CREDITS *" << endl;
-    cout << "************" << endl << endl;
 
     //TODO: use unsigned char everywhere
     unsigned char create_Y_array[2];
@@ -276,9 +293,7 @@ unsigned long parseHeaderBlock(ifstream &rf) {
 
     unsigned long read_bytes_data = 0;
 
-    cout << "************" << endl;
     cout << "*  HEADER  *" << endl;
-    cout << "************" << endl << endl;
 
     char header_magic[5];
     rf.read((char *) header_magic, 4);
@@ -332,7 +347,7 @@ int parseBlock(ifstream &rf, int index, bool credits_read) {
     unsigned long block_length = byteArrayToLong_8(block_length_array);
     //TODO: check if block_length number of bytes were read before next block
 
-    cout << endl << "*******************************";
+    cout << endl;
     cout << endl << "Reading block with id: " << block_id << ", and size: " << block_length << endl << endl;
 
     switch ((int) block_id) {
@@ -353,8 +368,16 @@ int parseBlock(ifstream &rf, int index, bool credits_read) {
     return block_id;
 }
 
-int main() {
-    ifstream rf("../caff-files/1.caff", ios::out | ios::binary);
+int main(int argc, char *argv[]) {
+    string current_exec_name = argv[0];
+    string file_name = "";
+    if(argc == 2){
+        file_name = argv[1];
+    } else {
+        handleError("Invalid arguments");
+    }
+
+    ifstream rf(file_name, ios::out | ios::binary);
     if (!rf) {
         cout << "Cannot open file!" << endl;
         return 1;
@@ -385,13 +408,14 @@ int main() {
             handleError("The file has additional invalid content");
         }
 
+        generateBmpFromCiff(ciff);
+
     } catch (string& e) {
         cout << endl << "******** ERROR ********" << endl;
         cout << "An error was caught:" << endl;
         cout << e << endl;
         cout << "***********************" << endl;
     }
-
 
     return 0;
 }
