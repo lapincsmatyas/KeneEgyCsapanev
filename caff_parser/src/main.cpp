@@ -16,7 +16,7 @@ public:
     std::vector<char> pixels{0};
 };
 
-Ciff ciff{};
+static Ciff ciff{};
 
 //structures for BMP headers
 #pragma pack( push, 1 )
@@ -103,9 +103,9 @@ vector<char> createPixelArray(ifstream &rf, unsigned int width, unsigned int hei
             rf.read((char *) &act[1], 1);
             rf.read((char *) &act[2], 1);
 
-            pixel_array.push_back(act[0]);
-            pixel_array.push_back(act[1]);
             pixel_array.push_back(act[2]);
+            pixel_array.push_back(act[1]);
+            pixel_array.push_back(act[0]);
     }
     return pixel_array;
 }
