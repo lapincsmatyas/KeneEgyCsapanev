@@ -27,9 +27,8 @@ int main(int argc, char *argv[]) {
         caffParser.parseCaff();
 
         BmpGenerator bmpGenerator{};
-        for (auto & ciff : caffParser.ciffs){
-            bmpGenerator.voidGenerateBmp(ciff.caption, ciff);
-        }
+        if(!caffParser.ciffs.empty())
+            bmpGenerator.voidGenerateBmp("ciff", caffParser.ciffs[0]);
     }
     catch (invalid_argument& e) {
         cout << "Error during parsing: " << e.what();
