@@ -1,4 +1,4 @@
-CC=afl-g++
+CC=g++
 
 output: main.o Ciff.o BmpGenerator.o CaffParser.o
 	$(CC) main.o Ciff.o BmpGenerator.o CaffParser.o -o output
