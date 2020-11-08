@@ -12,7 +12,7 @@ class CaffParser {
 public:
     std::vector<Ciff> ciffs;
     std::ifstream& rf;
-    CaffParser(std::string filename, std::ifstream &rf);
+    CaffParser(std::ifstream &rf);
     void parseCaff();
 private:
     unsigned long byteArrayToLong_8(const char* bytes);

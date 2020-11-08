@@ -4,13 +4,14 @@
 #include <iostream>
 #include <cstring>
 #include <fstream>
+#include <stdexcept>
 
 #include "CaffParser.h"
 #include "Ciff.h"
 
 using namespace std;
 
-CaffParser::CaffParser(string filename, ifstream &rf) : rf(rf) {
+CaffParser::CaffParser(ifstream &rf) : rf(rf) {
 }
 
 void CaffParser::handleError(string e) {
@@ -57,7 +58,7 @@ void CaffParser::parseCiff() {
 
     cout << "CIFF magic: " << ciff_header_magic << endl;
     if (strcmp(ciff_header_magic, "CIFF") != 0) {
-        handleError("CIFF magic is not CIFF");
+        throw invalid_argument("CIFF magic is not CIFF");
     }
 
     char header_size_array[8];
@@ -85,7 +86,7 @@ void CaffParser::parseCiff() {
     cout << "Height of CIFF: " << height << endl;
 
     if ((width * height * 3) != content_size) {
-        handleError("Invalid content size or width and size given");
+        throw invalid_argument("Invalid content size or width and size given");
     }
 
     string caption;
@@ -96,7 +97,7 @@ void CaffParser::parseCiff() {
         rf.read((char *) &act_char, 1);
     }
     if (act_char != '\n') {
-        handleError("Caption does not contain the end character");
+        throw invalid_argument("Caption does not contain the end character");
     }
     cout << "Caption of CIFF: " << caption << endl;
 
@@ -107,7 +108,7 @@ void CaffParser::parseCiff() {
         rf.read((char *) &act_char, 1);
     }
     if (act_char != '\0') {
-        handleError("Invalid end of tags");
+        throw invalid_argument("Invalid end of tags");
     }
 
     cout << "Tags of CIFF: " << tags << endl;
@@ -117,7 +118,7 @@ void CaffParser::parseCiff() {
     int end = rf.tellg();
 
     if (end - begin != content_size) {
-        handleError("Not valid size of bmp read");
+        throw invalid_argument("Not valid size of bmp read");
     }
 
     Ciff ciff{};
@@ -146,32 +147,32 @@ void CaffParser::parseAnimation() {
 void CaffParser::validateDate(unsigned int year, unsigned int month, unsigned int day, unsigned int hour,
                               unsigned int minute) {
     if (year < 1987 || year > 2020) {
-        handleError("Invalid year");
+        throw invalid_argument("Invalid year");
     }
 
     if (month <= 0 || month > 12) {
-        handleError("Invalid month");
+        throw invalid_argument("Invalid month");
     }
 
     if (((month == 1) || (month == 3) || (month == 5) || (month == 7) ||
          (month == 8) || (month == 10) || (month == 12)) && day > 31) {
-        handleError("This month has only 31 days");
+        throw invalid_argument("This month has only 31 days");
     }
 
     if (((month == 4) || (month == 6) || (month == 9) || (month == 11)) && day > 30) {
-        handleError("This month has only 30 days");
+        throw invalid_argument("This month has only 30 days");
     } else if (((month == 2) && (year % 4 == 0)) && day > 29) {
-        handleError("This month has only 29 days in leap years");
+        throw invalid_argument("This month has only 29 days in leap years");
     } else if (((month == 2) && (year % 4 != 0)) && day > 28) {
-        handleError("This month has only 28 days");
+        throw invalid_argument("This month has only 28 days");
     };
 
     if (hour < 0 || hour > 24) {
-        handleError("Invalid hour");
+        throw invalid_argument("Invalid hour");
     }
 
     if (minute < 0 || minute >= 60) {
-        handleError("Invalid minute");
+        throw invalid_argument("Invalid minute");
     }
 }
 
@@ -221,7 +222,7 @@ void CaffParser::parseCredits() {
 
     int end = rf.tellg();
     if ((end - begin) != (creator_length + 8 + 6)) {
-        handleError("Length of credits was invalid");
+        throw invalid_argument("Length of credits was invalid");
     }
 }
 
@@ -232,7 +233,7 @@ unsigned long CaffParser::parseHeaderBlock() {
     int block_id = (int) block_id_char;
 
     if (block_id != 1) {
-        handleError("The id of header was not 1");
+        throw invalid_argument("The id of header was not 1");
     }
 
     char block_length_array[8];
@@ -251,7 +252,7 @@ unsigned long CaffParser::parseHeaderBlock() {
     cout << "Header magic: " << header_magic << endl;
 
     if (strcmp(header_magic, "CAFF") != 0) {
-        handleError("Magic in header was not CAFF");
+        throw invalid_argument("Magic in header was not CAFF");
     }
 
     char header_size_array[8];
@@ -267,9 +268,9 @@ unsigned long CaffParser::parseHeaderBlock() {
     cout << "Number of CIFFs in animation: " << num_anim << endl;
 
     if (read_bytes_data != block_length) {
-        handleError("Size of header block was not the number of bytes read");
+        throw invalid_argument("Size of header block was not the number of bytes read");
     } else if (read_bytes_data != header_size) {
-        handleError("Size of header was not the number of bytes read");
+        throw invalid_argument("Size of header was not the number of bytes read");
     }
 
     return num_anim;
@@ -283,11 +284,11 @@ int CaffParser::parseBlock(int index, bool credits_read) {
     unsigned int block_id = (unsigned int) block_id_char;
 
     if (!(block_id == 1 || block_id == 2 || block_id == 3)) {
-        handleError("Invalid block id");
+        throw invalid_argument("Invalid block id");
     }
 
     if (credits_read && block_id == 2) {
-        handleError("Multiple credits blocks in file");
+        throw invalid_argument("Multiple credits blocks in file");
     }
 
     char block_length_array[8];
@@ -295,8 +296,7 @@ int CaffParser::parseBlock(int index, bool credits_read) {
     unsigned long block_length = byteArrayToLong_8(block_length_array);
     //TODO: check if block_length number of bytes were read before next block
 
-    cout << endl;
-    cout << endl << "Reading block with id: " << block_id << ", and size: " << block_length << endl << endl;
+    cout << endl << "Reading block with id: " << block_id << ", and size: " << block_length << " :" << endl;
 
     switch ((int) block_id) {
         case 2:
@@ -310,14 +310,14 @@ int CaffParser::parseBlock(int index, bool credits_read) {
 
     //check if block has the size specified in block length
     if ((end - begin - 8 - 1) != block_length) {
-        handleError("Length of block not valid");
+        throw invalid_argument("Length of block not valid");
     }
 
     return block_id;
 }
 
 void CaffParser::parseCaff() {
-    try {
+    try{
         //Header parsing
         //This is always the first block and contains the number of CIFF-s in the file
         unsigned int num_anim = parseHeaderBlock();
@@ -335,17 +335,14 @@ void CaffParser::parseCaff() {
             }
         }
         if (!credits_read) {
-            handleError("The file does not contain credits block");
+            throw invalid_argument("The file does not contain credits block");
         }
 
         if (rf.peek() != EOF) {
-            handleError("The file has additional invalid content");
+            throw invalid_argument("The file has additional invalid content");
         }
 
-    } catch (string &e) {
-        cout << endl << "******** ERROR ********" << endl;
-        cout << "An error was caught:" << endl;
-        cout << e << endl;
-        cout << "***********************" << endl;
+    } catch (invalid_argument& e) {
+        throw e;
     }
 }
