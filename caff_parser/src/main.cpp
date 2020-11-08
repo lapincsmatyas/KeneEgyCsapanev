@@ -1,4 +1,7 @@
+#include <fstream>
+#include <iostream>
 #include "CaffParser.h"
+#include "BmpGenerator.h"
 
 using namespace std;
 
@@ -11,55 +14,22 @@ int main(int argc, char *argv[]) {
     } else {
         // handleError("Invalid arguments");
     }
-
-    ifstream rf(file_name, ios::out | ios::binary);
+    */
+    ifstream rf("../caff-files/1.caff", ios::out | ios::binary);
     if (!rf) {
         cout << "Cannot open file!" << endl;
         return 1;
     }
     free(argv);
-    */
 
-    CaffParser caffParser{"1.caff"};
+    CaffParser caffParser{"../caff-files/1.caff", rf};
+    caffParser.parseCaff();
 
-    /*
-    try {
-        //Header parsing
-        //This is always the first block and contains the number of CIFF-s in the file
-         unsigned int num_anim = parseHeaderBlock(rf);
+    BmpGenerator bmpGenerator{};
 
-        //Parse rest of file, which contains blocks in an unspecified order
-        bool credits_read = false;
-        int animations_read = 0;
-
-        for (int i = 0; animations_read < num_anim && (i < num_anim + 1); i++) {
-            int type = parseBlock(rf, i, credits_read);
-            if (type == 2) {
-                credits_read = true;
-            } else if (type == 3) {
-                animations_read++;
-            }
-        }
-        if (!credits_read) {
-            handleError("The file does not contain credits block");
-        }
-
-        if(rf.peek() != EOF){
-            handleError("The file has additional invalid content");
-        }
-
-        Ciff ciff{};
-        generateBmpFromCiff(ciff);
-
-    } catch (string& e) {
-        cout << endl << "******** ERROR ********" << endl;
-        cout << "An error was caught:" << endl;
-        cout << e << endl;
-        cout << "***********************" << endl;
+    for (auto & ciff : caffParser.ciffs){
+        bmpGenerator.voidGenerateBmp(ciff.caption, ciff);
     }
-    ciff.pixels.clear();
-    ciff.caption.clear();
-    ciff.tags.clear();
-    */
+
     return 0;
 }

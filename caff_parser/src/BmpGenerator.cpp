@@ -32,11 +32,14 @@ struct BITMAPINFOHEADER {
 };
 #pragma pack( pop )
 
-void BmpGenerator::voidGenerateBmp(const std::string filename, Ciff ciff) {
-    cout << endl << "*   BMP generation   *" << endl;
-
+void BmpGenerator::voidGenerateBmp(std::string filename, Ciff ciff) {
+    ifstream infile(filename + ".bmp");
+    if(infile.good()){
+        filename += " (1)";
+    }
+    infile.close();
     ofstream ofs;
-    ofs.open(filename);
+    ofs.open(filename + ".bmp");
 
     BITMAPFILEHEADER bitmapfileheader{};
     bitmapfileheader.file_size = (sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + (ciff.width * ciff.height * 3));
@@ -62,5 +65,6 @@ void BmpGenerator::voidGenerateBmp(const std::string filename, Ciff ciff) {
         for(int padding = 0; padding < pad; padding++) ofs << 0x00;
     }
 
+    cout << "BMP image generated with name " << filename << endl;
     ofs.close();
 }
