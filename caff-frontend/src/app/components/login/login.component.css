@@ -1,0 +1,13 @@
+form {
+  max-width: 300px;
+  margin: auto;
+}
+
+.actions {
+  text-align: center;
+}
+
+h1 {
+  text-align: center;
+  padding-top: 30px;
+}
