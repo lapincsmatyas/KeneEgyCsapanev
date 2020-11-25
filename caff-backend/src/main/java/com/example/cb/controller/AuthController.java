@@ -112,7 +112,7 @@ public class AuthController {
                     roles.add(adminRole);
                 }
                 //check if user
-                if ("user".equals(role))  {
+                else if ("user".equals(role))  {
                     Role userRole = roleRepository.findByName(RoleEnum.ROLE_USER)
                             .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
                     roles.add(userRole);
