@@ -13,6 +13,10 @@ export class CaffService {
   constructor(private http: HttpClient) { }
 
   getAllCaffs(): Observable<Caff[]>{
-    return this.http.get<Caff[]>(AUTH_API + "/caff");
+    return this.http.get<Caff[]>(`${AUTH_API}/caff`);
+  }
+
+  getCaffById(id: number): Observable<Caff>{
+    return this.http.get<Caff>(`${AUTH_API}/caff/${id}`)
   }
 }

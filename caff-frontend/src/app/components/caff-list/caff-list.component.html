@@ -1,9 +1,8 @@
-<p>caff-list works!</p>
 <h1>Caffs</h1>
 <ul>
   <li *ngFor="let caff of caffList">
     Id: {{caff.id}}<br/>
-    Name: {{caff.name}}<br/>
+    Name: <a [routerLink]="['/caff', caff.id]">{{caff.name}}</a><br/>
     <img [src]="caff.preview" alt="Preview of caff"/><br/>
     Comments:
     <ul>

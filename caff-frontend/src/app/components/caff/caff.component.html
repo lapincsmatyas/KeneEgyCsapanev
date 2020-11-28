@@ -1,0 +1,12 @@
+  Id: {{caff.id}}<br/>
+  Name: {{caff.name}}<br/>
+  <img [src]="caff.preview" alt="Preview of caff"/><br/>
+  Comments:
+  <ul>
+    <li *ngFor="let comment of caff.comments">
+      Id: {{comment.id}}<br/>
+      User: {{comment.username}}<br/>
+      Comment: {{comment.comment}}<br/>
+    </li>
+  </ul>
+<br/>
