@@ -18,6 +18,7 @@ import { LogoutComponent } from './components/logout/logout.component';
 
 import { RegisterComponent } from './components/register/register.component';
 import { authInterceptorProviders } from './helpers/auth.interceptor';
+import {CaffListComponent} from "./components/caff-list/caff-list.component";
 
 const routers: Routes = [
   {path: 'header', component: HeaderComponent},
@@ -36,7 +37,8 @@ const routers: Routes = [
     HomeComponent,
     LoginComponent,
     RegisterComponent,
-    LogoutComponent
+    LogoutComponent,
+    CaffListComponent
   ],
   imports: [
     BrowserModule,

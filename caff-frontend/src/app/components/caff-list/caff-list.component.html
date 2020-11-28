@@ -1,0 +1,18 @@
+<p>caff-list works!</p>
+<h1>Caffs</h1>
+<ul>
+  <li *ngFor="let caff of caffList">
+    Id: {{caff.id}}<br/>
+    Name: {{caff.name}}<br/>
+    <img [src]="caff.preview" alt="Preview of caff"/><br/>
+    Comments:
+    <ul>
+      <li *ngFor="let comment of caff.comments">
+        Id: {{comment.id}}<br/>
+        User: {{comment.username}}<br/>
+        Comment: {{comment.comment}}<br/>
+      </li>
+    </ul>
+    <br/>
+  </li>
+</ul>
