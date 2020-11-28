@@ -54,10 +54,16 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "User registrated successfully!"
+                        "description": "User registrated successfully!",
+                        "schema": {
+                            "$ref": "#/definitions/MessageResponse"
+                        }
                     },
                     "400": {
-                        "description": "Error: Username is already taken! or Email is already in use!"
+                        "description": "Error: Username is already taken! or Email is already in use!",
+                        "schema": {
+                            "$ref": "#/definitions/MessageResponse"
+                        }
                     }
                 }
             }
@@ -122,7 +128,10 @@
                         }
                     },
 					"403": {
-						"description": "Other users are not available"
+						"description": "Other users are not available",
+                        "schema": {
+                            "$ref": "#/definitions/MessageResponse"
+                        }
 					}
                 }
             },
@@ -158,8 +167,17 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "User was updated successfully"
-                    }
+                        "description": "User was updated successfully",
+                        "schema": {
+                            "$ref": "#/definitions/MessageResponse"
+                        }
+                    },
+					"403": {
+						"description": "Other users are not available",
+                        "schema": {
+                            "$ref": "#/definitions/MessageResponse"
+                        }
+					}
                 }
             }
         },
@@ -197,10 +215,16 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "Comment added successfully"
+                        "description": "Comment added successfully",
+                        "schema": {
+                            "$ref": "#/definitions/MessageResponse"
+                        }
                     },
                     "400": {
-                        "description": "CAFF not found"
+                        "description": "CAFF not found",
+                        "schema": {
+                            "$ref": "#/definitions/MessageResponse"
+                        }
                     }
                 }
             }
@@ -225,13 +249,16 @@
                         "description": "The CAFF file",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/CAFFUpDownLoad"
+                            "$ref": "#/definitions/CAFFUpLoad"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "CAFF uploaded successfully"
+                        "description": "CAFF uploaded successfully",
+                        "schema": {
+                            "$ref": "#/definitions/MessageResponse"
+                        }
                     }
                 }
             }
@@ -260,11 +287,14 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/CAFFUpDownLoad"
+                            "$ref": "#/definitions/CAFFDownLoad"
                         }
                     },
                     "400": {
-                        "description": "CAFF not found"
+                        "description": "CAFF not found",
+                        "schema": {
+                            "$ref": "#/definitions/MessageResponse"
+                        }
                     }
                 }
             }
@@ -297,7 +327,10 @@
                         }
                     },
                     "400": {
-                        "description": "CAFF not found"
+                        "description": "CAFF not found",
+                        "schema": {
+                            "$ref": "#/definitions/MessageResponse"
+                        }
                     }
                 }
             }
@@ -355,7 +388,10 @@
                         }
                     },
                     "400": {
-                        "description": "CAFFs not found"
+                        "description": "CAFFs not found",
+                        "schema": {
+                            "$ref": "#/definitions/MessageResponse"
+                        }
                     }
                 }
             }
@@ -388,7 +424,10 @@
                         }
                     },
                     "400": {
-                        "description": "User not found"
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/MessageResponse"
+                        }
                     }
                 }
             },
@@ -425,10 +464,16 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "User was updated successfully"
+                        "description": "User was updated successfully",
+                        "schema": {
+                            "$ref": "#/definitions/MessageResponse"
+                        }
                     },
                     "400": {
-                        "description": "User not found"
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/MessageResponse"
+                        }
                     }
                 }
             },
@@ -453,10 +498,16 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "User deleted successfully"
+                        "description": "User deleted successfully",
+                        "schema": {
+                            "$ref": "#/definitions/MessageResponse"
+                        }
                     },
                     "400": {
-                        "description": "User not found"
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/MessageResponse"
+                        }
                     }
                 }
             }
@@ -495,10 +546,16 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "CAFF preview was updated successfully"
+                        "description": "CAFF preview was updated successfully",
+                        "schema": {
+                            "$ref": "#/definitions/MessageResponse"
+                        }
                     },
                     "400": {
-                        "description": "CAFF file not found"
+                        "description": "CAFF file not found",
+                        "schema": {
+                            "$ref": "#/definitions/MessageResponse"
+                        }
                     }
                 }
             },
@@ -523,17 +580,49 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "CAFF file deleted successfully"
+                        "description": "CAFF file deleted successfully",
+                        "schema": {
+                            "$ref": "#/definitions/MessageResponse"
+                        }
                     },
                     "400": {
-                        "description": "CAFF file not found"
+                        "description": "CAFF file not found",
+                        "schema": {
+                            "$ref": "#/definitions/MessageResponse"
+                        }
                     }
                 }
             }
         }
     },
     "definitions": {
-        "CAFFUpDownLoad": {
+        "CAFFDownLoad": {
+            "type": "object",
+            "required": [
+                "name",
+                "uri",
+				"type"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "description": "The name of the CAFF file"
+                },
+				"uri": {
+					"type": "string",
+					"description": "The path of the CAFF file"
+				},
+                "type": {
+                    "type": "string",
+                    "description": "The CAFF file's type"
+                },
+				"file": {
+					"type": "object",
+					"description": "The CAFF file"
+				}
+            }
+        },
+		"CAFFUpLoad": {
             "type": "object",
             "required": [
                 "name",
@@ -555,7 +644,7 @@
             "required": [
                 "id",
                 "name",
-                "preview"
+                "imguri"
             ],
             "properties": {
                 "id": {
@@ -566,9 +655,9 @@
                     "type": "string",
                     "description": "The name of the CAFF file"
                 },
-                "preview": {
-                    "type": "object",
-                    "description": "The image generated from first CIFF in CAFF"
+                "uri": {
+                    "type": "string",
+                    "description": "The path of the image generated from first CIFF in CAFF"
                 },
                 "comments": {
                     "type": "array",
@@ -607,7 +696,8 @@
                 "user_id",
                 "username",
                 "email",
-                "password"
+                "password",
+				"roles"
             ],
             "properties": {
                 "user_id": {
@@ -622,6 +712,12 @@
                 },
                 "password": {
                     "type": "string"
+                },
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         },
