@@ -1,17 +1,18 @@
 <h1>Caffs</h1>
-<ul>
-  <li *ngFor="let caff of caffList">
-    Id: {{caff.id}}<br/>
-    Name: <a [routerLink]="['/caff', caff.id]">{{caff.name}}</a><br/>
-    <img [src]="caff.preview" alt="Preview of caff"/><br/>
-    Comments:
-    <ul>
-      <li *ngFor="let comment of caff.comments">
-        Id: {{comment.id}}<br/>
-        User: {{comment.username}}<br/>
-        Comment: {{comment.comment}}<br/>
-      </li>
-    </ul>
-    <br/>
-  </li>
-</ul>
+
+<div class="row card-deck">
+  <div class="col-3 card" *ngFor="let caff of caffList">
+
+    <div class="card-body">
+      <h2 class="card-title"> {{caff.name}}</h2>
+      <a [routerLink]="['/caff', caff.id]" class="stretched-link"></a>
+      <img class="card-img-top" [src]="caff.preview" alt="Preview of caff"/>
+      <ul class="list-group list-group-flush">
+        <li *ngFor="let comment of caff.comments" class="list-group-item">
+          <b>{{comment.username}}</b>
+          <p>{{comment.comment}}</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
