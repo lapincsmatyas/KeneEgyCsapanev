@@ -1,0 +1,52 @@
+{
+  "caff": [
+    {
+      "id": 1,
+      "name": "Beautiful Scenery",
+      "preview": "https://picsum.photos/300/200",
+      "comments": [
+        {
+          "id": 1,
+          "username": "test.user",
+          "comment": "Nagyon szép ez a kép"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "Beautiful Scenery",
+      "preview": "https://picsum.photos/300/200",
+      "comments": [
+        {
+          "id": 1,
+          "username": "test.user",
+          "comment": "Nagyon szép ez a kép"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Beautiful Scenery",
+      "preview": "https://picsum.photos/300/200",
+      "comments": [
+        {
+          "id": 1,
+          "username": "test.user",
+          "comment": "Nagyon szép ez a kép"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Beautiful Scenery",
+      "preview": "https://picsum.photos/300/200",
+      "comments": [
+        {
+          "id": 1,
+          "username": "test.user",
+          "comment": "Nagyon szép ez a kép"
+        }
+      ]
+    }
+  ]
+}
