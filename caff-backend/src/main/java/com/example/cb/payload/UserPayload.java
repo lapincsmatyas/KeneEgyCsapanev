@@ -4,14 +4,14 @@ import java.util.List;
 
 import com.example.cb.model.Role;
 
-public class User {
+public class UserPayload {
 	private long user_id;
 	private String username;
 	private String email;
 	private String password;
 	private List<Role> roles;
 	
-	public User(long user_id, String username, String email, String password, List<Role> roles) {
+	public UserPayload(long user_id, String username, String email, String password, List<Role> roles) {
 		this.user_id = user_id;
 		this.username = username;
 		this.email = email;

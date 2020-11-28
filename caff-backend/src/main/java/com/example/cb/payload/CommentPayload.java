@@ -1,9 +1,9 @@
 package com.example.cb.payload;
 
-public class Comment {
+public class CommentPayload {
 	private String username;
 	private String comment;
-	public Comment(String username, String comment) {
+	public CommentPayload(String username, String comment) {
 		this.username = username;
 		this.comment = comment;
 	}

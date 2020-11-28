@@ -4,8 +4,6 @@ import java.util.List;
 
 import javax.persistence.*;
 
-import com.example.cb.payload.Comment;
-
 @Entity
 @Table(name="caffs")
 public class CAFF {
@@ -16,7 +14,9 @@ public class CAFF {
 	private String type;
 	@Lob
 	private byte[] data;
-	//private List<Comment> comments;
+	@OneToMany(orphanRemoval=true)
+	@JoinColumn(name="comment_id")
+	private List<Comment> comments;
 	
 	public CAFF() {}
 	public CAFF(String name, String type, byte[] data) {
@@ -28,7 +28,7 @@ public class CAFF {
 		this.name=name;
 		this.type=type;
 		this.data=data;
-		//this.comments=comments;
+		this.comments=comments;
 	}
 	public long getId() {
 		return id;
@@ -51,10 +51,10 @@ public class CAFF {
 	public void setData(byte[] data) {
 		this.data = data;
 	}
-	/*public List<Comment> getComments() {
+	public List<Comment> getComments() {
 		return comments;
 	}
 	public void setComments(List<Comment> comments) {
 		this.comments = comments;
-	}*/
+	}
 }

@@ -18,7 +18,7 @@ import com.example.cb.payload.CAFFPreview;
 import com.example.cb.payload.MessageResponse;
 import com.example.cb.service.CAFFService;
 
-/*@CrossOrigin("*")
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/caff")
 public class CAFFController {
@@ -49,4 +49,4 @@ public class CAFFController {
 	}
 	
 	
-}*/
+}
