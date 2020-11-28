@@ -671,15 +671,10 @@
         "Comment": {
             "type": "object",
             "required": [
-                "id",
                 "username",
                 "comment"
             ],
             "properties": {
-                "id": {
-                    "type": "integer",
-                    "format": "int64"
-                },
                 "username": {
                     "type": "string",
                     "description": "The commenting user's username"
