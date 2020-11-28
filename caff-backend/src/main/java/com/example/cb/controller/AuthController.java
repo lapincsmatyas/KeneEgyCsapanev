@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @CrossOrigin("*")
@@ -73,6 +72,7 @@ public class AuthController {
 
         return ResponseEntity.ok(new LoginResponse(jwt, userDetails.getUser().getUser_id(), userDetails.getUsername(), userDetails.getUser().getEmail(), roles));
     }
+    
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody SignupRequest signUpRequest) {
         //check if username or email already exists
@@ -94,10 +94,11 @@ public class AuthController {
                 encoder.encode(signUpRequest.getPassword()));
 
         //set the roles
-        Set<String> strRoles = signUpRequest.getRole();
+        //Set<String> strRoles = new HashSet<>();
         List<Role> roles = new ArrayList<Role>();
+        roles.add(roleRepository.findByName(RoleEnum.ROLE_USER).orElseThrow(()->new RuntimeException("Roles not found")));
 
-        //if no role was given, the default is user
+        /*//if no role was given, the default is user
         if (strRoles == null) {
             Role userRole = roleRepository.findByName(RoleEnum.ROLE_USER)
                     .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
@@ -121,7 +122,7 @@ public class AuthController {
                     throw new RuntimeException("Error: Wrong Role.");
                 }
             });
-        }
+        }*/
 
         //give the role to the user and save it
         user.setRoles(roles);
