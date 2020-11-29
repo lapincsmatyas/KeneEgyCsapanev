@@ -1,3 +1,4 @@
+<div *ngIf="caff">
   Id: {{caff.id}}<br/>
   Name: {{caff.name}}<br/>
   <img [src]="caff.preview" alt="Preview of caff"/><br/>
@@ -9,4 +10,6 @@
       Comment: {{comment.comment}}<br/>
     </li>
   </ul>
-<br/>
+  <button class="btn-success" (click)="addCaffToCart()">Kosárba</button>
+  <br/>
+</div>

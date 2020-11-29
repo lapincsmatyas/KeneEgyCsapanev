@@ -11,10 +11,9 @@ import { TokenStorageService } from 'src/app/services/token-storage.service';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor(private router: Router,
-    public app: AppComponent) { }
+  constructor(public app: AppComponent) { }
 
   ngOnInit(): void {
   }
-  
+
 }
