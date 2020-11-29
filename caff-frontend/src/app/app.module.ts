@@ -27,7 +27,7 @@ const routers: Routes = [
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent },
   { path: 'logout', component: LogoutComponent},
-  { path: 'cart', component: CartComponent},
+  { path: 'cart', component: CartComponent, canActivate: [AuthGuard]},
 
   { path: 'caffs', component: CaffListComponent, canActivate: [AuthGuard]},
   { path: 'caff/:id', component: CaffComponent, canActivate: [AuthGuard]},

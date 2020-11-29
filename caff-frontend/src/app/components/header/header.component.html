@@ -4,21 +4,19 @@
           <li class="nav-item active">
             <a class="nav-link" routerLink="/home">Home</a>
           </li>
-          <li  *ngIf="app.isLoggedIn" class="nav-item active">
+          <li  *ngIf="authService.isLoggedIn()" class="nav-item active">
             <a class="nav-link" routerLink="/caffs">Caffs</a>
           </li>
-          <li  *ngIf="!app.isLoggedIn" class="nav-item active">
-            <a class="nav-link" routerLink="/register">Register</a>
-          </li>
-          <li  *ngIf="!app.isLoggedIn" class="nav-item active">
+
+          <li  *ngIf="!authService.isLoggedIn()" class="nav-item active">
             <a class="nav-link" routerLink="/login">Login</a>
           </li>
-          <li  *ngIf="app.isLoggedIn"  class="nav-item active">
+          <li *ngIf="authService.isLoggedIn()"  class="nav-item active">
             <a class="nav-link" routerLink="/cart">Kosár</a>
           </li>
 
-        <li  *ngIf="app.isLoggedIn"  class="nav-item active">
-            <a (click)="app.logout()" class="nav-link" routerLink="/logout">Log out</a>
+        <li *ngIf="authService.isLoggedIn()"  class="nav-item active">
+            <a (click)="authService.logout()" class="nav-link" routerLink="/logout">Log out</a>
           </li>
 
       </ul>
