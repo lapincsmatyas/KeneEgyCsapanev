@@ -21,15 +21,16 @@ import { CaffComponent } from './components/caff/caff.component';
 import { AuthGuard } from './helpers/auth-guard';
 import { CartComponent } from './components/cart/cart.component';
 import { ProfileComponent } from './components/profile/profile.component';
-
+import { AdminComponent } from './components/admin/admin.component';
 const routers: Routes = [
   {path: 'header', component: HeaderComponent,},
   { path: 'home', component: HomeComponent},
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent },
   { path: 'logout', component: LogoutComponent},
-  { path: 'cart', component: CartComponent, canActivate: [AuthGuard]},
+  { path: 'cart', component: CartComponent},
   { path: 'profile', component: ProfileComponent},
+  { path: 'admin', component: AdminComponent},
 
   { path: 'caffs', component: CaffListComponent, canActivate: [AuthGuard]},
   { path: 'caff/:id', component: CaffComponent, canActivate: [AuthGuard]},
@@ -48,7 +49,8 @@ const routers: Routes = [
     CaffListComponent,
     CaffComponent,
     CartComponent,
-    ProfileComponent
+    ProfileComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,

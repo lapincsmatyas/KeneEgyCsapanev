@@ -1,0 +1,13 @@
+<div class="col-md-12">
+  <h1>Users</h1>
+  <ul class="list-group list-group-flush col-md-10">
+    <li *ngFor="let user of users" class="list-group-item">
+      <div class="row">
+        <h2 class="col-md-6 my-auto">{{user.username}}</h2>
+        <div class="col-md-4 my-auto">
+          <a class="btn btn-primary float-right" [routerLink]="['/profile', user.id]">Edit</a>
+        </div>
+      </div>
+    </li>
+  </ul>
+</div>
