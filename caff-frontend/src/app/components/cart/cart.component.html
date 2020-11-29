@@ -1,0 +1,19 @@
+<h1>Kosár</h1>
+<div  *ngIf="cartService.cart.size > 0" >
+  <h2>Kosár tartalma:</h2>
+  <ul>
+    <li *ngFor="let item of cartService.cart | keyvalue">
+      {{item.key.name}} -
+      <button class="btn btn-danger" (click)="cartService.removeCaffFromCart(item.key)">-</button>
+      {{item.value}}
+      <button class="btn btn-success" (click)="cartService.addCaffToCart(item.key)">+</button>
+      <button class="btn btn-warning" (click)="cartService.deleteCaffFromCart(item.key)">Törlés</button>
+    </li>
+  </ul>
+  <button class="btn btn-danger" (click)="cartService.clearCart()">Kosár ürítése</button>
+  <button class="btn btn-success" (click)="cartService.downloadCaffs()">Caffok megvásárlása</button>
+</div>
+<div *ngIf="cartService.cart.size == 0">
+  <h2>A kosarad jelenleg üres</h2>
+  <a routerLink="/caffs">Adj hozzá CAFFokat! ;)</a>
+</div>

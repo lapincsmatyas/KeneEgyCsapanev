@@ -19,6 +19,7 @@ import { authInterceptorProviders } from './helpers/auth.interceptor';
 import {CaffListComponent} from "./components/caff-list/caff-list.component";
 import { CaffComponent } from './components/caff/caff.component';
 import { AuthGuard } from './helpers/auth-guard';
+import { CartComponent } from './components/cart/cart.component';
 
 const routers: Routes = [
   {path: 'header', component: HeaderComponent,},
@@ -26,6 +27,7 @@ const routers: Routes = [
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent },
   { path: 'logout', component: LogoutComponent},
+  { path: 'cart', component: CartComponent},
 
   { path: 'caffs', component: CaffListComponent, canActivate: [AuthGuard]},
   { path: 'caff/:id', component: CaffComponent, canActivate: [AuthGuard]},
@@ -42,7 +44,8 @@ const routers: Routes = [
     RegisterComponent,
     LogoutComponent,
     CaffListComponent,
-    CaffComponent
+    CaffComponent,
+    CartComponent
   ],
   imports: [
     BrowserModule,
