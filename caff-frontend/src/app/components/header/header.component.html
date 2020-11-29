@@ -22,7 +22,7 @@
 
     </ul>
   </div>
-  <div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+  <div *ngIf="authService.isLoggedIn()" class="navbar-collapse collapse w-100 order-3 dual-collapse2">
     <ul class="navbar-nav ml-auto">
       <li class="nav-item dropdown" routerLinkActive="active">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
@@ -30,7 +30,7 @@
           Profil
         </a>
         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" routerLink="/profile">Személyes adatok</a>
+          <a class="dropdown-item" [routerLink]="['/profile', this.authService.getCurrentUser().username]">Személyes adatok</a>
           <a class="dropdown-item" (click)="authService.logout()">Kijelentkezés</a>
         </div>
       </li>

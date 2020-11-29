@@ -24,13 +24,13 @@ import { ProfileComponent } from './components/profile/profile.component';
 import { AdminComponent } from './components/admin/admin.component';
 const routers: Routes = [
   {path: 'header', component: HeaderComponent,},
-  { path: 'home', component: HomeComponent},
+  { path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent },
   { path: 'logout', component: LogoutComponent},
-  { path: 'cart', component: CartComponent},
-  { path: 'profile', component: ProfileComponent},
-  { path: 'admin', component: AdminComponent},
+  { path: 'cart', component: CartComponent, canActivate: [AuthGuard]},
+  { path: 'profile/:username', component: ProfileComponent, canActivate: [AuthGuard]},
+  { path: 'admin', component: AdminComponent, canActivate: [AuthGuard]},
 
   { path: 'caffs', component: CaffListComponent, canActivate: [AuthGuard]},
   { path: 'caff/:id', component: CaffComponent, canActivate: [AuthGuard]},
