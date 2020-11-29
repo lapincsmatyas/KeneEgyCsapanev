@@ -5,7 +5,7 @@
             <a class="nav-link" routerLink="/home">Home</a>
           </li>
           <li class="nav-item active">
-            <a class="nav-link" routerLink="/caffs">Caffs</a>
+            <a *ngIf="app.isLoggedIn" class="nav-link" routerLink="/caffs">Caffs</a>
           </li>
           <li class="nav-item active">
             <a *ngIf="!app.isLoggedIn" class="nav-link" routerLink="/register">Register</a>

@@ -18,16 +18,17 @@ import { RegisterComponent } from './components/register/register.component';
 import { authInterceptorProviders } from './helpers/auth.interceptor';
 import {CaffListComponent} from "./components/caff-list/caff-list.component";
 import { CaffComponent } from './components/caff/caff.component';
+import { AuthGuard } from './helpers/auth-guard';
 
 const routers: Routes = [
-  {path: 'header', component: HeaderComponent},
+  {path: 'header', component: HeaderComponent,},
   { path: 'home', component: HomeComponent},
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent },
   { path: 'logout', component: LogoutComponent},
 
-  { path: 'caffs', component: CaffListComponent},
-  { path: 'caff/:id', component: CaffComponent},
+  { path: 'caffs', component: CaffListComponent, canActivate: [AuthGuard]},
+  { path: 'caff/:id', component: CaffComponent, canActivate: [AuthGuard]},
   // otherwise redirect to home
   { path: '**', redirectTo: 'home' }
 ];
@@ -55,7 +56,7 @@ const routers: Routes = [
     ReactiveFormsModule,
     MatButtonModule,
   ],
-  providers: [authInterceptorProviders],
+  providers: [authInterceptorProviders, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
