@@ -9,9 +9,9 @@ public class UserPayload {
 	private String username;
 	private String email;
 	private String password;
-	private List<Role> roles;
+	private List<String> roles;
 	
-	public UserPayload(long user_id, String username, String email, String password, List<Role> roles) {
+	public UserPayload(long user_id, String username, String email, String password, List<String> roles) {
 		this.user_id = user_id;
 		this.username = username;
 		this.email = email;
@@ -51,11 +51,11 @@ public class UserPayload {
 		this.password = password;
 	}
 
-	public List<Role> getRoles() {
+	public List<String> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(List<Role> roles) {
+	public void setRoles(List<String> roles) {
 		this.roles = roles;
 	}
 }

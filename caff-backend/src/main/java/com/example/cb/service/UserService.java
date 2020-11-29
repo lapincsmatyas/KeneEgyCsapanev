@@ -9,7 +9,7 @@ public interface UserService {
 	
 	public User save(User user);
 
-	public User findById(Long id);
+	public User findById(long id);
 	
 	public User findByUsername(String username);
 

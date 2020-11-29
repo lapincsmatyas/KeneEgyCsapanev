@@ -7,6 +7,7 @@ import com.example.cb.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>{
+	public User findById(long id);
 	
 	public User findByUsername(String username);
 
