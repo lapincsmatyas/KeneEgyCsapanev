@@ -23,7 +23,7 @@ export class CaffService {
   }
 
   addComment(comment: Comment, id: number): Observable<any> {
-    return this.http.put<any>(environment.authUrl + `/${id}/comment`, { comment: comment });
+    return this.http.put<any>(environment.authUrl + `/${id}/comment`, { comment });
   }
 
 }
