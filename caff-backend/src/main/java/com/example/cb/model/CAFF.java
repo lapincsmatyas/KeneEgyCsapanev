@@ -1,8 +1,11 @@
 package com.example.cb.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.*;
+
+import com.example.cb.payload.CommentPayload;
 
 @Entity
 @Table(name="caffs")
@@ -75,6 +78,13 @@ public class CAFF {
 	}
 	public void setComments(List<Comment> comments) {
 		this.comments = comments;
+	}
+	public List<CommentPayload> getCommentPayloads() {
+		List<CommentPayload> list = new ArrayList<CommentPayload>();
+		for(Comment c : comments) {
+			list.add(new CommentPayload(c.getUsername(), c.getComment()));
+		}
+		return list;
 	}
 	public void addCommenttoCommments(Comment comment){
 		this.comments.add(comment);

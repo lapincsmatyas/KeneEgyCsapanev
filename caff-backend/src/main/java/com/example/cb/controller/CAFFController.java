@@ -143,13 +143,15 @@ public class CAFFController {
 		return ResponseEntity.status(HttpStatus.OK).body(caffPreviews);
 	}
 	
-	@GetMapping("/find/{namefilter}")//TODO
+	@GetMapping("/find/{namefilter}")
 	public ResponseEntity<List<CAFFPreview>> findCAFF(@PathVariable String namefilter){
 		List<CAFFPreview> previews = new ArrayList<CAFFPreview>();
 		List<CAFF> caffs = new ArrayList<CAFF>();
 		caffs = service.getCAFFsByFilter(namefilter);
-		
-		return null;
+		for(CAFF c : caffs) {
+			previews.add(new CAFFPreview(c.getId(), c.getName(), c.getImguri(), c.getCommentPayloads()));
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(previews);
 	}
 	
 	private File runParser(CAFFUpLoad caffupload){
