@@ -48,5 +48,13 @@
         }
       ]
     }
-  ]
+  ],
+  "user": {
+    "user_id": 1,
+    "username": "mock.user",
+    "email": "mockuser@mockuser.com",
+    "roles": [
+      "USER"
+    ]
+  }
 }

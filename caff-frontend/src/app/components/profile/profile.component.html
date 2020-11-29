@@ -1,0 +1,17 @@
+<div>
+  <div class="form-group">
+    <label for="username">Felhaszánlónév</label>
+    <input type="text" class="form-control" id="username" [disabled]="!edit"
+           required
+           [(ngModel)]="userName" name="username">
+  </div>
+
+  <div class="form-group">
+    <label for="email">Email cím</label>
+    <input type="text" class="form-control" id="email" [disabled]="!edit"
+           [(ngModel)]="email" name="email">
+  </div>
+</div>
+
+<button *ngIf="!edit" (click)="toggleEdit()" class="btn btn-info">Szerkesztés</button>
+<button *ngIf="edit" (click)="saveData()" class="btn btn-success">Mentés</button>
