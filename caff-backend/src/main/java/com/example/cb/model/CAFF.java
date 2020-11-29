@@ -14,22 +14,26 @@ public class CAFF {
 	private String type;
 	@Lob
 	private byte[] data;
+	@Lob
+	private byte[] imgdata;
 	private String imguri;
 	@OneToMany(orphanRemoval=true)
 	@JoinColumn(name="comment_id")
 	private List<Comment> comments;
 	
 	public CAFF() {}
-	public CAFF(String name, String type, byte[] data, String imguri) {
+	public CAFF(String name, String type, byte[] data, byte[] imgdata, String imguri) {
 		this.name=name;
 		this.type=type;
 		this.data=data;
+		this.imgdata=imgdata;
 		this.imguri=imguri;
 	}
-	public CAFF(String name, String type, byte[] data, String imguri, List<Comment> comments) {
+	public CAFF(String name, String type, byte[] data, byte[] imgdata, String imguri, List<Comment> comments) {
 		this.name=name;
 		this.type=type;
 		this.data=data;
+		this.imgdata=imgdata;
 		this.imguri=imguri;
 		this.comments=comments;
 	}
@@ -53,6 +57,12 @@ public class CAFF {
 	}
 	public void setData(byte[] data) {
 		this.data = data;
+	}
+	public byte[] getImgdata() {
+		return imgdata;
+	}
+	public void setImgdata(byte[] imgdata) {
+		this.imgdata = imgdata;
 	}
 	public String getImguri() {
 		return imguri;

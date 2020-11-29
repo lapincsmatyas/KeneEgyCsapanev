@@ -13,7 +13,7 @@ public class Comment {
 	private String comment;
 	
 	public Comment() {}
-	public Comment(long commentid, String username, String comment, CAFF caff) {
+	public Comment(long commentid, String username, String comment) {
 		this.commentid = commentid;
 		this.username = username;
 		this.comment = comment;
