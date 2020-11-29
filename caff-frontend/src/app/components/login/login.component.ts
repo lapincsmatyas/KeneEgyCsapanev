@@ -28,9 +28,6 @@ export class LoginComponent implements OnInit {
   onSubmit(): void {
     this.authService.login(this.form).subscribe(
       data => {
-        this.tokenStorage.saveToken(data.jwt);
-        this.tokenStorage.saveUser(data);
-
         this.isLoginFailed = false;
         this.isLoggedIn = true;
         this.roles = this.tokenStorage.getUser().roles;
@@ -44,5 +41,9 @@ export class LoginComponent implements OnInit {
         this.isLoginFailed = true;
       }
     );
+  }
+
+  registerUser() {
+    this.router.navigateByUrl("/register");
   }
 }
