@@ -2,9 +2,11 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+//TODO: remove auth URL
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8080'
+  apiUrl: 'http://localhost:3000',
+  authUrl: 'http://localhost:8080'
 };
 /*
  * For easier debugging in development mode, you can import the following file
