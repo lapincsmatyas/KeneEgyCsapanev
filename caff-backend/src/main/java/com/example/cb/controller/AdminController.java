@@ -48,7 +48,12 @@ public class AdminController {
 		User user = null;
 		user = userservice.findById(id);
 		if(user==null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("User not found"));
-		UserPayload res = new UserPayload(user.getUser_id(), user.getUsername(), user.getEmail(), user.getPassword(), user.getRoles().stream().map(role-> role.toString()).collect(Collectors.toList()));
+		UserPayload res = new UserPayload(
+				user.getUser_id(),
+				user.getUsername(),
+				user.getEmail(),
+				user.getPassword(),
+				user.getStrRoles());
 		return ResponseEntity.status(HttpStatus.OK).body(res);
 	}
 	

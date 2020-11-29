@@ -84,4 +84,13 @@ public class User {
     public void setRoles(List<Role> roles) {
     	this.roles = roles;
     }
+    
+    public List<String> getStrRoles(){
+    	List<String> list = new ArrayList<String>();
+    	for(Role r : roles) {
+    		if(r.getRole().equals(RoleEnum.ROLE_ADMIN)) list.add("admin");
+    		else if (r.getRole().equals(RoleEnum.ROLE_USER)) list.add("user");
+    	}
+    	return list;
+    }
 }
