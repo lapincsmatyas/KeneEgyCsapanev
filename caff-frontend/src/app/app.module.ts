@@ -21,6 +21,7 @@ import { CaffComponent } from './components/caff/caff.component';
 import { AuthGuard } from './helpers/auth-guard';
 import { CartComponent } from './components/cart/cart.component';
 import { ProfileComponent } from './components/profile/profile.component';
+import { CommonModule } from '@angular/common';
 
 const routers: Routes = [
   {path: 'header', component: HeaderComponent,},
@@ -61,6 +62,7 @@ const routers: Routes = [
     MatIconModule,
     ReactiveFormsModule,
     MatButtonModule,
+    CommonModule
   ],
   providers: [authInterceptorProviders, AuthGuard],
   bootstrap: [AppComponent]
