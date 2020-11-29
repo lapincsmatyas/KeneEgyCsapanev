@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -57,13 +58,14 @@ public class CAFFController {
 	}
 	
 	@PostMapping("/upload")//TODO: parse image
-	public ResponseEntity<MessageResponse> uploadCAFF(@RequestBody CAFFUpLoad caffupload){
+	public ResponseEntity<MessageResponse> uploadCAFF(@RequestParam MultipartFile file){
+		
 		String message="";
 		String imguri="";
-		File imgfile = runParser(caffupload);
+		File imgfile = runParser(file);
 		try {
 			byte[] imgdata = Files.readAllBytes(imgfile.toPath());
-			service.store(caffupload.getFile(), imgdata, imguri);
+			service.store(file, imgdata, imguri);
 			message = "Upload was successful";
 			return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse(message));
 		} catch (Exception e) {
@@ -154,10 +156,9 @@ public class CAFFController {
 		return ResponseEntity.status(HttpStatus.OK).body(previews);
 	}
 	
-	private File runParser(CAFFUpLoad caffupload){
-		String name = caffupload.getName();
+	private File runParser(MultipartFile caffupload){
+		String name = caffupload.getOriginalFilename();
 		if(name.endsWith(".caff")) name = name.substring(0, name.length()-5);
-		MultipartFile file = caffupload.getFile();
 		/*Path currentRelativePath = Paths.get("");
 		String currentPath = currentRelativePath.toAbsolutePath().toString();*/
 		String currentPath = System.getProperty("user.dir");
@@ -165,7 +166,7 @@ public class CAFFController {
 		String caffPath = currentPath + "/caff_parser/caff-files";
 		Path pathToSave = Paths.get(caffPath + name + ".caff");
 		try {
-			Files.write(pathToSave, file.getBytes());
+			Files.write(pathToSave, caffupload.getBytes());
 		} catch (IOException e1) {}
 		String command = "." + processPath + "/output ../caff-files/" + name + ".caff " + name;
 		try {

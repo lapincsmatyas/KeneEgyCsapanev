@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -29,7 +30,7 @@ import com.example.cb.service.CAFFService;
 import com.example.cb.service.UserService;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(origins = "*"/*, allowedHeaders = "*"*/)
 @RequestMapping("/admin")
 public class AdminController {
 	@Autowired
@@ -40,6 +41,14 @@ public class AdminController {
 	private RoleRepository roleRepository;
     @Autowired
     private PasswordEncoder encoder;
+	
+	@GetMapping("/user")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	public ResponseEntity<?> getAdminAllUser(){
+		List<User> users = new ArrayList<User>();
+		users = userservice.findAll();
+		return ResponseEntity.status(HttpStatus.OK).body(users);
+	}
 	
 	@GetMapping("/user/{userid}")
 	public ResponseEntity<?> getAdminUserProfile(@PathVariable String userid){
