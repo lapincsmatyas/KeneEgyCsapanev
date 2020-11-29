@@ -42,7 +42,7 @@ public class CAFFController {
 	private CAFFService service;
 	
 	@PutMapping("/{caffid}/comment")
-	public ResponseEntity<MessageResponse> commentCAFF(@PathVariable String caffid, @RequestBody CommentPayload commentPayload){
+	public ResponseEntity<?> commentCAFF(@PathVariable String caffid, @RequestBody CommentPayload commentPayload){
 		long id = Long.parseLong(caffid);
 
 		try {
@@ -53,13 +53,12 @@ public class CAFFController {
 			return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Commenting was successful"));
 
 		} catch (Exception e) {
-			return null;
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("CAFF not found"));
 		}
 	}
 	
 	@PostMapping("/upload")//TODO: parse image
 	public ResponseEntity<MessageResponse> uploadCAFF(@RequestParam MultipartFile file){
-		
 		String message="";
 		String imguri="";
 		File imgfile = runParser(file);
@@ -77,7 +76,6 @@ public class CAFFController {
 				.path("/caffs/imgs/")
 				.path(caffupload.getName())
 				.toUriString();*/
-		
 	}
 	
 	@GetMapping("/{caffid}/download")
@@ -172,7 +170,7 @@ public class CAFFController {
 		try {
 			Process p = Runtime.getRuntime().exec(command);
 		} catch (IOException e) {}
-		File img = new File(processPath + name + "bmp");
+		File img = new File(processPath + "/" + name + ".bmp");
 		return img;
 	}
 }

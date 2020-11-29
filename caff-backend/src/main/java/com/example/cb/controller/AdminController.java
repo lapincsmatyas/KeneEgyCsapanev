@@ -2,6 +2,7 @@ package com.example.cb.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.cb.model.CAFF;
 import com.example.cb.model.MyUserDetails;
 import com.example.cb.model.Role;
 import com.example.cb.model.RoleEnum;
@@ -30,7 +32,7 @@ import com.example.cb.service.CAFFService;
 import com.example.cb.service.UserService;
 
 @RestController
-@CrossOrigin(origins = "*"/*, allowedHeaders = "*"*/)
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/admin")
 public class AdminController {
 	@Autowired
@@ -43,7 +45,6 @@ public class AdminController {
     private PasswordEncoder encoder;
 	
 	@GetMapping("/user")
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public ResponseEntity<?> getAdminAllUser(){
 		List<User> users = new ArrayList<User>();
 		users = userservice.findAll();
@@ -134,13 +135,21 @@ public class AdminController {
 	@PutMapping("/caff/{caffid}")//TODO
 	public ResponseEntity<?> updateAdminCAFF(@PathVariable String caffid, @RequestBody CAFFPreview caff){
 		long id = Long.parseLong(caffid);
+		
+		
 		return null;
 	}
 	
-	@DeleteMapping("/caff/{caffid}")//TODO
+	@DeleteMapping("/caff/{caffid}")
 	public ResponseEntity<MessageResponse> deleteAdminCAFF(@PathVariable String caffid){
 		long id = Long.parseLong(caffid);
-		return null;
+		try {
+			CAFF caff = caffservice.getCAFF(id);
+			caffservice.delete(caff);
+			return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("CAFF was deleted successfully"));
+		} catch (NoSuchElementException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("CAFF not found"));
+		}
 	}
 
     /*@GetMapping("/welcome")

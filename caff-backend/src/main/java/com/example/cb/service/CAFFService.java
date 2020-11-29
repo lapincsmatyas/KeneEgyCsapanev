@@ -10,7 +10,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.cb.model.CAFF;
-import com.example.cb.payload.CAFFPreview;
 import com.example.cb.repository.CAFFRepository;
 
 @Service
@@ -34,6 +33,11 @@ public class CAFFService {
 
 	public List<CAFF> getCAFFsByFilter(String namefilter) {
 		return repo.findByNameContainingIgnoreCase(namefilter);
+		
+	}
+
+	public void delete(CAFF caff) {
+		repo.delete(caff);
 		
 	}
 }
