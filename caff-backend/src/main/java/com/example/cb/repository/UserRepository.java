@@ -7,11 +7,14 @@ import com.example.cb.model.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>{
+	public User findById(long id);
 	
-	User findByUsername(String username);
+	public User findByUsername(String username);
 
-	Boolean existsByUsername(String username);
+	public Boolean existsByUsername(String username);
 
-	Boolean existsByEmail(String email);
+	public Boolean existsByEmail(String email);
+
+	public User findByEmail(String email);
 }
  

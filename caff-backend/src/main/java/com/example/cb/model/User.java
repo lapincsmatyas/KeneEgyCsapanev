@@ -29,6 +29,8 @@ public class User {
 			inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private List<Role> roles = new ArrayList<Role>();
 
+	public User() {}
+
 	public User(User user) {
 		this.user_id = user.user_id;
 		this.username = user.username;
@@ -43,7 +45,20 @@ public class User {
 		this.password = password;
 	}
 
-	public User() {
+	public Long getUser_id() {
+		return user_id;
+	}
+
+	public void setUser_id(Long user_id) {
+		this.user_id = user_id;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getEmail() {
@@ -54,33 +69,28 @@ public class User {
 		this.email = email;
 	}
 
-	public Long getUser_id() {
-		return user_id;
-	}
-
-	public void setUser_id(Long user_id) {
-		this.user_id = user_id;
-	}
-
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
 	public String getPassword() {
 		return password;
-	}
-
-	public String getUsername() {
-		return username;
-	}
-
-	public List<Role> getRoles() {
-		return roles;
 	}
 
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
-    public void setRoles(List<Role> roles) { this.roles = roles; }
+	public List<Role> getRoles() {
+		return roles;
+	}
+
+    public void setRoles(List<Role> roles) {
+    	this.roles = roles;
+    }
+    
+    public List<String> getStrRoles(){
+    	List<String> list = new ArrayList<String>();
+    	for(Role r : roles) {
+    		if(r.getRole().equals(RoleEnum.ROLE_ADMIN)) list.add("admin");
+    		else if (r.getRole().equals(RoleEnum.ROLE_USER)) list.add("user");
+    	}
+    	return list;
+    }
 }

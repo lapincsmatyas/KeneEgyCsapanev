@@ -5,11 +5,15 @@ import java.util.List;
 import com.example.cb.model.User;
 
 public interface UserService {
-	List<User> findAll();
+	public List<User> findAll();
 	
-	User save(User user);
+	public User save(User user);
 
-	User findById(Long id);
+	public User findById(long id);
+	
+	public User findByUsername(String username);
 
-	void delete(Long id);
+	public void delete(User user);
+
+	public User findByEmail(String email);
 }
