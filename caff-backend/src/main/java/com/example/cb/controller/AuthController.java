@@ -92,6 +92,7 @@ public class AuthController {
                 signUpRequest.getEmail(),
                 encoder.encode(signUpRequest.getPassword()));
 
+        //TODO: admin function
         //set the roles
         //Set<String> strRoles = new HashSet<>();
         List<Role> roles = new ArrayList<Role>();
