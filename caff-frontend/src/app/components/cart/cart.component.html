@@ -1,19 +1,27 @@
-<h1>Kosár</h1>
-<div  *ngIf="cartService.cart.size > 0" >
-  <h2>Kosár tartalma:</h2>
-  <ul>
-    <li *ngFor="let item of cartService.cart | keyvalue">
-      {{item.key.name}} -
-      <button class="btn btn-danger" (click)="cartService.removeCaffFromCart(item.key)">-</button>
-      {{item.value}}
-      <button class="btn btn-success" (click)="cartService.addCaffToCart(item.key)">+</button>
-      <button class="btn btn-warning" (click)="cartService.deleteCaffFromCart(item.key)">Törlés</button>
-    </li>
-  </ul>
-  <button class="btn btn-danger" (click)="cartService.clearCart()">Kosár ürítése</button>
-  <button class="btn btn-success" (click)="cartService.downloadCaffs()">Caffok megvásárlása</button>
-</div>
-<div *ngIf="cartService.cart.size == 0">
-  <h2>A kosarad jelenleg üres</h2>
-  <a routerLink="/caffs">Adj hozzá CAFFokat! ;)</a>
+<div class="col-md-12">
+  <h1>Shopping Cart</h1>
+  <div *ngIf="cartService.cart.size > 0">
+    <p class="text-center">{{cartService.cart.size}} item(s) in your cart</p>
+
+    <ul class="list-group list-group-flush col-md-10">
+      <li *ngFor="let item of cartService.cart" class="list-group-item">
+      <div class="row">
+        <img [src]="item.preview" class="col-md-3 my-auto"/>
+          <h2 class="col-md-4 my-auto">{{item.name}}</h2>
+          <div class="col-md-3 my-auto">
+            <button class="btn btn-warning float-right" (click)="cartService.deleteCaffFromCart(item)">Remove</button>
+          </div>
+      </div>
+      </li>
+    </ul>
+
+    <div class="col-md-6 btn-group-vertical float-right ">
+      <button class="btn btn-danger  col-md-2 float-right" (click)="cartService.clearCart()">Empty cart</button>
+      <button class="btn btn-success col-md-2 float-right  " (click)="cartService.downloadCaffs()">Buy CAFFs</button>
+    </div>
+  </div>
+  <div *ngIf="cartService.cart.size == 0">
+    <h2>The cart is empty.</h2>
+    <a routerLink="/caffs">Add CAFFs to cart!</a>
+  </div>
 </div>
