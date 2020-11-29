@@ -1,5 +1,7 @@
 package com.example.cb.model;
 
+import com.example.cb.payload.CommentPayload;
+
 import javax.persistence.*;
 
 @Entity
@@ -13,8 +15,7 @@ public class Comment {
 	private String comment;
 	
 	public Comment() {}
-	public Comment(long commentid, String username, String comment) {
-		this.commentid = commentid;
+	public Comment(String username, String comment) {
 		this.username = username;
 		this.comment = comment;
 	}
@@ -35,5 +36,9 @@ public class Comment {
 	}
 	public void setComment(String comment) {
 		this.comment = comment;
+	}
+
+	public CommentPayload commentToPayload(Comment comment){
+		return new CommentPayload(comment.getUsername(), comment.getComment());
 	}
 }

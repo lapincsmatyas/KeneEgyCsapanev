@@ -6,8 +6,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
+import com.example.cb.model.Comment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,10 +40,20 @@ public class CAFFController {
 	@Autowired
 	private CAFFService service;
 	
-	@PutMapping("/{caffid}/comment")//TODO
-	public ResponseEntity<MessageResponse> commentCAFF(@PathVariable String caffid, @RequestBody CommentPayload comment){
+	@PutMapping("/{caffid}/comment")
+	public ResponseEntity<MessageResponse> commentCAFF(@PathVariable String caffid, @RequestBody CommentPayload commentPayload){
 		long id = Long.parseLong(caffid);
-		return null;
+
+		try {
+			CAFF caff = service.getCAFF(id);
+			Comment comment = new Comment(commentPayload.getUsername(), commentPayload.getComment());
+			caff.addCommenttoCommments(comment);
+
+			return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Commenting was successful"));
+
+		} catch (Exception e) {
+			return null;
+		}
 	}
 	
 	@PostMapping("/upload")//TODO: parse image
@@ -68,7 +81,7 @@ public class CAFFController {
 	@GetMapping("/{caffid}/download")
 	public ResponseEntity<?> downloadCAFF(@PathVariable String caffid){
 		long id = Long.parseLong(caffid);
-		CAFF caff = new CAFF();
+		CAFF caff;
 		try {
 			caff = service.getCAFF(id);
 		} catch (NoSuchElementException e) {
@@ -83,15 +96,51 @@ public class CAFFController {
 		return ResponseEntity.status(HttpStatus.OK).body(res);
 	}
 	
-	@GetMapping("/{caffid}")//TODO
-	public ResponseEntity<CAFFPreview> viewCAFF(@PathVariable String caffid){
+	@GetMapping("/{caffid}")
+	public ResponseEntity<?> viewCAFF(@PathVariable String caffid){
 		long id = Long.parseLong(caffid);
-		return null;
+		CAFFPreview caffPreview;
+		List<CommentPayload> payloadList = new ArrayList<>();
+		try {
+			CAFF caff = service.getCAFF(id);
+			List<Comment> commentList = caff.getComments();
+			for(Comment comment : commentList){
+				CommentPayload payload = comment.commentToPayload(comment);
+				payloadList.add(payload);
+			}
+			caffPreview = new CAFFPreview(caff.getId(), caff.getName(), caff.getImguri(), payloadList);
+		} catch (NoSuchElementException e) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("CAFF not found"));
+		}
+		return ResponseEntity.status(HttpStatus.OK).body(caffPreview);
 	}
 	
-	@GetMapping("")//TODO
+	@GetMapping("")
 	public ResponseEntity<List<CAFFPreview>> listCAFF(){
-		return null;
+
+		List<CAFFPreview> caffPreviews = service.getAllCAFF().map(dbFile -> {
+			String fileDownloadUri = ServletUriComponentsBuilder
+					.fromCurrentContextPath()
+					.path("/files/")
+					.path(String.valueOf(dbFile.getId()))
+					.toUriString();
+
+					List<CommentPayload> payloadList = new ArrayList<>();
+					List<Comment> commentList = dbFile.getComments();
+
+					for (Comment comment : commentList) {
+						CommentPayload payload = comment.commentToPayload(comment);
+						payloadList.add(payload);
+					}
+
+			return new CAFFPreview(
+					dbFile.getId(),
+					dbFile.getName(),
+					dbFile.getImguri(),
+					payloadList);
+			}).collect(Collectors.toList());
+
+		return ResponseEntity.status(HttpStatus.OK).body(caffPreviews);
 	}
 	
 	@GetMapping("/find/{namefilter}")//TODO
