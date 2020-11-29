@@ -162,7 +162,7 @@ public class CAFFController {
 		String currentPath = System.getProperty("user.dir");
 		String processPath = currentPath + "/caff_parser/src";
 		String caffPath = currentPath + "/caff_parser/caff-files";
-		Path pathToSave = Paths.get(caffPath + name + ".caff");
+		Path pathToSave = Paths.get(caffPath + "/" + name + ".caff");
 		try {
 			Files.write(pathToSave, caffupload.getBytes());
 		} catch (IOException e1) {}
