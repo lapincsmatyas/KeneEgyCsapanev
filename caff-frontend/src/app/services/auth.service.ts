@@ -22,7 +22,7 @@ const httpOptions = {
     }
 
     register(user): Observable<any> {
-      return this.http.post(environment.authUrl + 'auth/signup', {
+      return this.http.post(environment.authUrl + '/auth/signup', {
         username: user.username,
         email: user.email,
         password: user.password,
