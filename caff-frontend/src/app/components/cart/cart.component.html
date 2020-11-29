@@ -4,12 +4,12 @@
     <p class="text-center">{{cartService.cart.size}} item(s) in your cart</p>
 
     <ul class="list-group list-group-flush col-md-10">
-      <li *ngFor="let item of cartService.cart | keyvalue" class="list-group-item">
+      <li *ngFor="let item of cartService.cart" class="list-group-item">
       <div class="row">
-        <img [src]="item.key.preview" class="col-md-3 my-auto"/>
-          <h2 class="col-md-4 my-auto">{{item.key.name}}</h2>
+        <img [src]="item.preview" class="col-md-3 my-auto"/>
+          <h2 class="col-md-4 my-auto">{{item.name}}</h2>
           <div class="col-md-3 my-auto">
-            <button class="btn btn-warning float-right" (click)="cartService.deleteCaffFromCart(item.key)">Remove</button>
+            <button class="btn btn-warning float-right" (click)="cartService.deleteCaffFromCart(item)">Remove</button>
           </div>
       </div>
       </li>

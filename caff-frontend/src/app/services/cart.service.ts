@@ -6,30 +6,23 @@ import {HttpClient} from "@angular/common/http";
   providedIn: 'root'
 })
 export class CartService {
-  public cart = new Map();
+  public cart = new Set();
 
   constructor(private http: HttpClient) { }
 
   addCaffToCart(caff: Caff) {
-    if(this.cart.has(caff)){
-      this.cart.set(caff, this.cart.get(caff) + 1);
-    } else {
-      this.cart.set(caff, 1);
+    if(!this.cart.has(caff)){
+      this.cart.add(caff);
     }
   }
 
-  removeCaffFromCart(caff: Caff) {
-    this.cart.set(caff, this.cart.get(caff) - 1);
-    if (this.cart.get(caff).value == 0)
-      this.deleteCaffFromCart(caff);
-  }
 
   deleteCaffFromCart(caff: Caff){
     this.cart.delete(caff);
   }
 
   clearCart(){
-    this.cart = new Map();
+    this.cart = new Set();
   }
 
   downloadCaffs(){
