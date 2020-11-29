@@ -33,8 +33,8 @@ import java.util.stream.Collectors;
 public class AuthController {
     @Autowired
     private AuthenticationManager authenticationManager;
-    @Autowired
-    private UserDetailsService userDetailsService;
+    /*@Autowired
+    private UserDetailsService userDetailsService;*/
     @Autowired
     private JwtUtil jwtUtil;
     @Autowired

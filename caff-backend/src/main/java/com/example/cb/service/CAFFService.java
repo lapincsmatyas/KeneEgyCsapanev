@@ -16,9 +16,9 @@ public class CAFFService {
 	@Autowired
 	private CAFFRepository repo;
 	
-	public CAFF store(MultipartFile file) throws IOException{
+	public CAFF store(MultipartFile file, String imguri) throws IOException{
 		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-		CAFF caff = new CAFF(fileName, file.getContentType(), file.getBytes());
+		CAFF caff = new CAFF(fileName, file.getContentType(), file.getBytes(), imguri);
 		return repo.save(caff);
 	}
 	

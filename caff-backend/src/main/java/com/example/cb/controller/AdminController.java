@@ -28,26 +28,31 @@ public class AdminController {
 	
 	@GetMapping("/user/{userid}")//TODO
 	public ResponseEntity<UserPayload> getAdminUserProfile(@PathVariable String userid){
+		long id = Long.parseLong(userid);
 		return null;
 	}
 	
 	@PutMapping("/user/{userid}")//TODO
 	public ResponseEntity<MessageResponse> updateAdminUserProfile(@PathVariable String userid, @RequestBody UserPayload user){
+		long id = Long.parseLong(userid);
 		return null;
 	}
 	
 	@DeleteMapping("/user/{userid}")//TODO
 	public ResponseEntity<MessageResponse> deleteAdminUserProfile(@PathVariable String userid){
+		long id = Long.parseLong(userid);
 		return null;
 	}
 	
 	@PutMapping("/caff/{caffid}")//TODO
 	public ResponseEntity<MessageResponse> updateAdminCAFF(@PathVariable String caffid, @RequestBody CAFFPreview caff){
+		long id = Long.parseLong(caffid);
 		return null;
 	}
 	
 	@DeleteMapping("/caff/{caffid}")//TODO
 	public ResponseEntity<MessageResponse> deleteAdminCAFF(@PathVariable String caffid){
+		long id = Long.parseLong(caffid);
 		return null;
 	}
 
