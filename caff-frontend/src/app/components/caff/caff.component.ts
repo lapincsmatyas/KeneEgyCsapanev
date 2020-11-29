@@ -5,7 +5,6 @@ import {Caff} from "../../models/caff";
 import {CartService} from "../../services/cart.service";
 import { Comment } from 'src/app/models/comment';
 import { TokenStorageService } from 'src/app/services/token-storage.service';
-import { User } from 'src/app/models/user';
 
 @Component({
   selector: 'app-caff',
@@ -41,8 +40,8 @@ export class CaffComponent implements OnInit {
   }
 
   addComment(){
+    this.comment.username = this.tokenStorage.getUser.name;
     console.log(this.comment.comment);
-    this.comment.username = this.tokenStorage.getUser().username;
     this.caffService.addComment(this.comment, this.caff.id).subscribe(() => {
       this.caffService.getCaffById(this.caff.id).subscribe(
       data => {
