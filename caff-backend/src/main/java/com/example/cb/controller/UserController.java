@@ -28,7 +28,7 @@ public class UserController {
 	@GetMapping("/{username}")
 	public ResponseEntity<?> getUserProfile(@PathVariable String username){
 		MyUserDetails userDetails = (MyUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if(userDetails.getUsername()!=username) return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MessageResponse("Other users are not available"));
+		if(!userDetails.getUsername().equals(username)) return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MessageResponse("Other users are not available " + userDetails.getUsername()));
 		User user = null;
 		user = service.findByUsername(username);
 		if(user==null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("User not found"));
@@ -37,9 +37,9 @@ public class UserController {
 	}
 	
 	@PutMapping("/{username}")
-	public ResponseEntity<MessageResponse> updateUserProfile(@PathVariable String username, @RequestBody UserPayload user){
+	public ResponseEntity<?> updateUserProfile(@PathVariable String username, @RequestBody UserPayload user){
 		MyUserDetails userDetails = (MyUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		if(userDetails.getUsername()!=username) return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MessageResponse("Other users are not available"));
+		if(!userDetails.getUsername().equals(username)) return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MessageResponse("Other users are not available"));
 		User userdb = null;
 		userdb = service.findByUsername(username);
 		if(userdb==null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("User not found"));

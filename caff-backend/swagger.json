@@ -9,7 +9,7 @@
     "tags": [
         {
             "name": "auth",
-            "description": "authentication-related"
+            "description": "Authorization-related"
         },
         {
             "name": "user",
@@ -119,7 +119,13 @@
                         "description": "The user's username",
                         "required": true,
                         "type": "string"
-                    }],
+                    },
+					{
+						"name": "Authorization",
+						"in": "header",
+						"description": "Bearer {jwt-token}",
+						"type": "string"
+					}],
                 "responses": {
                     "200": {
                         "description": "",
@@ -154,6 +160,12 @@
                         "description": "The user's username",
                         "required": true,
                         "type": "string"
+                    },
+					{
+						"name": "Authorization",
+						"in": "header",
+						"description": "Bearer {jwt-token}",
+						"type": "string"
                     },
                     {
                         "in": "body",
@@ -203,6 +215,12 @@
                         "type": "integer",
                         "format": "int64"
                     },
+					{
+						"name": "Authorization",
+						"in": "header",
+						"description": "Bearer {jwt-token}",
+						"type": "string"
+                    },
                     {
                         "in": "body",
                         "name": "body",
@@ -243,6 +261,12 @@
                     "application/json"
                 ],
                 "parameters": [
+					{
+						"name": "Authorization",
+						"in": "header",
+						"description": "Bearer {jwt-token}",
+						"type": "string"
+                    },
                     {
                         "in": "body",
                         "name": "body",
@@ -281,6 +305,12 @@
                         "required": true,
                         "type": "integer",
                         "format": "int64"
+                    },
+					{
+						"name": "Authorization",
+						"in": "header",
+						"description": "Bearer {jwt-token}",
+						"type": "string"
                     }
                 ],
                 "responses": {
@@ -317,6 +347,12 @@
                         "required": true,
                         "type": "integer",
                         "format": "int64"
+                    },
+					{
+						"name": "Authorization",
+						"in": "header",
+						"description": "Bearer {jwt-token}",
+						"type": "string"
                     }
                 ],
                 "responses": {
@@ -344,6 +380,14 @@
                 "operationId": "listCAFF",
                 "produces": [
                     "application/json"
+                ],
+                "parameters": [
+					{
+						"name": "Authorization",
+						"in": "header",
+						"description": "Bearer {jwt-token}",
+						"type": "string"
+                    }
                 ],
                 "responses": {
                     "200": {
@@ -375,6 +419,12 @@
                         "description": "A part of the searched CAFF's name",
                         "required": true,
                         "type": "string"
+                    },
+					{
+						"name": "Authorization",
+						"in": "header",
+						"description": "Bearer {jwt-token}",
+						"type": "string"
                     }
                 ],
                 "responses": {
@@ -414,6 +464,12 @@
                         "required": true,
                         "type": "integer",
                         "format": "int64"
+                    },
+					{
+						"name": "Authorization",
+						"in": "header",
+						"description": "Bearer {jwt-token}",
+						"type": "string"
                     }
                 ],
                 "responses": {
@@ -451,6 +507,12 @@
                         "required": true,
                         "type": "integer",
                         "format": "int64"
+                    },
+					{
+						"name": "Authorization",
+						"in": "header",
+						"description": "Bearer {jwt-token}",
+						"type": "string"
                     },
                     {
                         "in": "body",
@@ -494,6 +556,12 @@
                         "required": true,
                         "type": "integer",
                         "format": "int64"
+                    },
+					{
+						"name": "Authorization",
+						"in": "header",
+						"description": "Bearer {jwt-token}",
+						"type": "string"
                     }
                 ],
                 "responses": {
@@ -533,6 +601,12 @@
                         "required": true,
                         "type": "integer",
                         "format": "int64"
+                    },
+					{
+						"name": "Authorization",
+						"in": "header",
+						"description": "Bearer {jwt-token}",
+						"type": "string"
                     },
                     {
                         "in": "body",
@@ -576,6 +650,12 @@
                         "required": true,
                         "type": "integer",
                         "format": "int64"
+                    },
+					{
+						"name": "Authorization",
+						"in": "header",
+						"description": "Bearer {jwt-token}",
+						"type": "string"
                     }
                 ],
                 "responses": {
@@ -615,11 +695,7 @@
                 "type": {
                     "type": "string",
                     "description": "The CAFF file's type"
-                },
-				"file": {
-					"type": "object",
-					"description": "The CAFF file"
-				}
+                }
             }
         },
 		"CAFFUpLoad": {
