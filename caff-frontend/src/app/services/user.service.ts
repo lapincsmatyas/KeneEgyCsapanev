@@ -12,6 +12,10 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   getUserData(username: string): Observable<User>{
-    return this.http.get<User>(`${environment.apiUrl}/{$username}`);
+    return this.http.get<User>(`${environment.apiUrl}/user/${username}`);
+  }
+
+  changeUserData(user: User) {
+    return new Observable<null>();
   }
 }

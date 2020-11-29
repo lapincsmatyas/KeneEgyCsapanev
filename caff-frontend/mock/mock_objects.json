@@ -51,8 +51,8 @@
   ],
   "user": {
     "user_id": 1,
-    "username": "Beautiful Scenery",
-    "email": "https://picsum.photos/300/200",
+    "username": "mock.user",
+    "email": "mockuser@mockuser.com",
     "roles": [
       "USER"
     ]
