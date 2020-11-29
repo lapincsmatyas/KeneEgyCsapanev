@@ -1,5 +1,7 @@
 package com.example.cb.model;
 
+import com.example.cb.payload.CommentPayload;
+
 import java.util.List;
 
 import javax.persistence.*;
@@ -65,5 +67,8 @@ public class CAFF {
 	}
 	public void setComments(List<Comment> comments) {
 		this.comments = comments;
+	}
+	public void addCommenttoCommments(Comment comment){
+		this.comments.add(comment);
 	}
 }
