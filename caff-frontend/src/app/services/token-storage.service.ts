@@ -9,6 +9,8 @@ const USER_KEY = 'user_key';
 })
 export class TokenStorageService {
 
+  user: User = new User();
+
   constructor() { }
 
   public saveToken(token: string): void {
@@ -25,8 +27,12 @@ export class TokenStorageService {
     window.sessionStorage.setItem(USER_KEY, JSON.stringify(user));
   }
 
+  
   public getUser(): User {
-    return JSON.parse(sessionStorage.getItem(USER_KEY));
+    this.user = JSON.parse(sessionStorage.getItem(USER_KEY));
+    console.log("user: " + this.user);
+    return this.user;
+
   }
 
   logout() {

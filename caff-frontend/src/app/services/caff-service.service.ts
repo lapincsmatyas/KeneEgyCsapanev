@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Caff} from "../models/caff";
 import {Observable} from "rxjs";
 import { environment } from 'src/environments/environment';
+import { Comment } from '../models/comment';
 
 
 
@@ -20,4 +21,9 @@ export class CaffService {
   getCaffById(id: number): Observable<Caff>{
     return this.http.get<Caff>(environment.apiUrl + `/caff/${id}`)
   }
+
+  addComment(comment: Comment, id: number): Observable<any> {
+    return this.http.put<any>(environment.authUrl + `/caff/${id}/comment`, { body: comment });
+  }
+
 }
