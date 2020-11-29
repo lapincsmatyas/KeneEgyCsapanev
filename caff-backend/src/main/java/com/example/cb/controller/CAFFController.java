@@ -1,7 +1,12 @@
 package com.example.cb.controller;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -23,6 +28,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.example.cb.model.CAFF;
 import com.example.cb.payload.CAFFDownLoad;
 import com.example.cb.payload.CAFFPreview;
+import com.example.cb.payload.CAFFUpLoad;
 import com.example.cb.payload.CommentPayload;
 import com.example.cb.payload.MessageResponse;
 import com.example.cb.service.CAFFService;
@@ -51,16 +57,25 @@ public class CAFFController {
 	}
 	
 	@PostMapping("/upload")//TODO: parse image
-	public ResponseEntity<MessageResponse> uploadCAFF(@RequestBody MultipartFile file){
+	public ResponseEntity<MessageResponse> uploadCAFF(@RequestBody CAFFUpLoad caffupload){
+		String message="";
 		String imguri="";
-		//TODO: parse file
+		File imgfile = runParser(caffupload);
 		try {
-			service.store(file, imguri);
-
-			return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("Upload was successful"));
+			byte[] imgdata = Files.readAllBytes(imgfile.toPath());
+			service.store(caffupload.getFile(), imgdata, imguri);
+			message = "Upload was successful";
+			return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse(message));
 		} catch (Exception e) {
 			return null;
 		}
+		/*CAFF caff = service.findByName(caffupload.getName());
+		imguri = ServletUriComponentsBuilder
+				.fromCurrentContextPath()
+				.path("/caffs/imgs/")
+				.path(caffupload.getName())
+				.toUriString();*/
+		
 	}
 	
 	@GetMapping("/{caffid}/download")
@@ -131,5 +146,26 @@ public class CAFFController {
 	@GetMapping("/find/{namefilter}")//TODO
 	public ResponseEntity<List<CAFFPreview>> findCAFF(@PathVariable String namefilter){
 		return null;
+	}
+	
+	private File runParser(CAFFUpLoad caffupload){
+		String name = caffupload.getName();
+		if(name.endsWith(".caff")) name = name.substring(0, name.length()-5);
+		MultipartFile file = caffupload.getFile();
+		/*Path currentRelativePath = Paths.get("");
+		String currentPath = currentRelativePath.toAbsolutePath().toString();*/
+		String currentPath = System.getProperty("user.dir");
+		String processPath = currentPath + "/caff_parser/src";
+		String caffPath = currentPath + "/caff_parser/caff-files";
+		Path pathToSave = Paths.get(caffPath + name + ".caff");
+		try {
+			Files.write(pathToSave, file.getBytes());
+		} catch (IOException e1) {}
+		String command = "." + processPath + "/output ../caff-files/" + name + ".caff " + name;
+		try {
+			Process p = Runtime.getRuntime().exec(command);
+		} catch (IOException e) {}
+		File img = new File(processPath + name + "bmp");
+		return img;
 	}
 }
