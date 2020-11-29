@@ -2,6 +2,7 @@ import {Component, Input, OnInit} from '@angular/core';
 import {CaffService} from "../../services/caff-service.service";
 import {ActivatedRoute} from "@angular/router";
 import {Caff} from "../../models/caff";
+import {CartService} from "../../services/cart.service";
 
 @Component({
   selector: 'app-caff',
@@ -15,6 +16,7 @@ export class CaffComponent implements OnInit {
   caff: Caff;
 
   constructor(private caffService: CaffService,
+              private cartService: CartService,
               private route: ActivatedRoute
   ) {
 
@@ -26,5 +28,10 @@ export class CaffComponent implements OnInit {
         this.caff = result;
       })
     });
+  }
+
+  addCaffToCart() {
+    this.cartService.addCaffToCart(this.caff);
+    console.log(this.cartService.cart);
   }
 }
