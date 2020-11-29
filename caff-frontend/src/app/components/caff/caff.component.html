@@ -1,15 +1,24 @@
-<div *ngIf="caff">
-  Id: {{caff.id}}<br/>
-  Name: {{caff.name}}<br/>
-  <img [src]="caff.preview" alt="Preview of caff"/><br/>
-  Comments:
-  <ul>
-    <li *ngFor="let comment of caff.comments">
-      Id: {{comment.id}}<br/>
-      User: {{comment.username}}<br/>
-      Comment: {{comment.comment}}<br/>
-    </li>
-  </ul>
-  <button class="btn btn-success" (click)="addCaffToCart()">Kosárba</button>
-  <br/>
+<div class="col-md-12">
+  <h1>{{caff.name}}</h1>
+  <div class="col-6">
+
+    <img class="mx-auto d-block" [src]="caff.preview" alt="Preview of caff"/>
+
+    <div class="text-right">
+      <button class="btn btn-success" (click)="addCaffToCart()">Add to cart</button>
+    </div>
+
+  </div>
+  <div class="col-6">
+    <h2>Comments</h2>
+    <div class="text-right">
+      <button class="btn btn-primary">New comment</button>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li  class="list-group-item" *ngFor="let comment of caff.comments">
+        <b>{{comment.username}}</b>
+        <p>{{comment.comment}}</p>
+      </li>
+    </ul>
+  </div>
 </div>
