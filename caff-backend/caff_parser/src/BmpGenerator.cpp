@@ -34,11 +34,7 @@ struct BITMAPINFOHEADER {
 
 void BmpGenerator::voidGenerateBmp(std::string filename, Ciff ciff) {
     cout << endl << "Starting BMP generation" << endl;
-    ifstream infile(filename + ".bmp");
-    if(infile.good()){
-        filename += " (1)";
-    }
-    infile.close();
+
     ofstream ofs;
     ofs.open(filename + ".bmp");
 

@@ -9,8 +9,10 @@ int main(int argc, char *argv[]) {
 
     string current_exec_name = argv[0];
     string file_name = "";
-    if(argc == 2){
+    string output_file_name = "";
+    if(argc == 3){
         file_name = argv[1];
+        output_file_name = argv[2];
     } else {
         cout << "Invalid arguments";
         return 1;
@@ -28,7 +30,7 @@ int main(int argc, char *argv[]) {
 
         BmpGenerator bmpGenerator{};
         if(!caffParser.ciffs.empty())
-            bmpGenerator.voidGenerateBmp("ciff", caffParser.ciffs[0]);
+            bmpGenerator.voidGenerateBmp(output_file_name, caffParser.ciffs[0]);
     }
     catch (invalid_argument& e) {
         cout << "Error during parsing: " << e.what();
