@@ -1,6 +1,7 @@
 package com.example.cb.service;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.cb.model.CAFF;
+import com.example.cb.payload.CAFFPreview;
 import com.example.cb.repository.CAFFRepository;
 
 @Service
@@ -28,5 +30,10 @@ public class CAFFService {
 	
 	public Stream<CAFF> getAllCAFF(){
 		return repo.findAll().stream();
+	}
+
+	public List<CAFF> getCAFFsByFilter(String namefilter) {
+		return repo.findByNameContainingIgnoreCase(namefilter);
+		
 	}
 }

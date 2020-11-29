@@ -19,8 +19,8 @@ import com.example.cb.payload.MessageResponse;
 import com.example.cb.payload.UserPayload;
 import com.example.cb.service.UserService;
 
-@CrossOrigin("*")
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/user")
 public class UserController {
 	@Autowired

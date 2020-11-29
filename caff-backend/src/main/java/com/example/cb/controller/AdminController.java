@@ -28,8 +28,8 @@ import com.example.cb.repository.RoleRepository;
 import com.example.cb.service.CAFFService;
 import com.example.cb.service.UserService;
 
-@CrossOrigin("*")
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/admin")
 public class AdminController {
 	@Autowired

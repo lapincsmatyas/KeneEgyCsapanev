@@ -1,7 +1,5 @@
 package com.example.cb.model;
 
-import com.example.cb.payload.CommentPayload;
-
 import java.util.List;
 
 import javax.persistence.*;

@@ -33,8 +33,8 @@ import com.example.cb.payload.CommentPayload;
 import com.example.cb.payload.MessageResponse;
 import com.example.cb.service.CAFFService;
 
-@CrossOrigin("*")
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/caff")
 public class CAFFController {
 	@Autowired
@@ -145,6 +145,10 @@ public class CAFFController {
 	
 	@GetMapping("/find/{namefilter}")//TODO
 	public ResponseEntity<List<CAFFPreview>> findCAFF(@PathVariable String namefilter){
+		List<CAFFPreview> previews = new ArrayList<CAFFPreview>();
+		List<CAFF> caffs = new ArrayList<CAFF>();
+		caffs = service.getCAFFsByFilter(namefilter);
+		
 		return null;
 	}
 	
