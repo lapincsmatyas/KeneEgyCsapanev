@@ -21,21 +21,21 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public User save(User user) {
-		userRepository.save(user);
-		return user;
+		return userRepository.save(user);
 	}
 
 	@Override
 	public User findById(Long id) {
-		if(userRepository.findById(id).isPresent()) {
-			return userRepository.findById(id).get();
-		}
-		return null;
+		return userRepository.findById(id).get();
 	}
 
 	@Override
-	public void delete(Long id) {
-		User user = findById(id);
+	public User findByUsername(String username) {
+		return userRepository.findByUsername(username);
+	}
+
+	@Override
+	public void delete(User user) {
 		userRepository.delete(user);
 	}
 

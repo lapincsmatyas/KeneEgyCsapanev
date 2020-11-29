@@ -51,7 +51,7 @@ public class CAFFController {
 		}
 	}
 	
-	@GetMapping("/{caffid}/download")//TODO
+	@GetMapping("/{caffid}/download")
 	public ResponseEntity<?> downloadCAFF(@PathVariable String caffid){
 		long id = Long.parseLong(caffid);
 		CAFF caff = new CAFF();
