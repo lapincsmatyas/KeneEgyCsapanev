@@ -140,11 +140,10 @@ public class AdminController {
 		return null;
 	}
 	
-	@DeleteMapping("/caff/{caffid}")
-	public ResponseEntity<MessageResponse> deleteAdminCAFF(@PathVariable String caffid){
-		long id = Long.parseLong(caffid);
+	@DeleteMapping("/caff/{id}")
+	public ResponseEntity<MessageResponse> deleteAdminCAFF(@PathVariable Long id){
 		try {
-			CAFF caff = caffservice.getCAFF(id);
+			CAFF caff = caffservice.getCAFFById(id);
 			caffservice.delete(caff);
 			return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("CAFF was deleted successfully"));
 		} catch (NoSuchElementException e) {

@@ -1,17 +1,17 @@
 package com.example.cb.payload;
 
 public class CommentPayload {
-	private String username;
+	private String userName;
 	private String comment;
 	public CommentPayload(String username, String comment) {
-		this.username = username;
+		this.userName = username;
 		this.comment = comment;
 	}
-	public String getUsername() {
-		return username;
+	public String getUserName() {
+		return userName;
 	}
-	public void setUsername(String username) {
-		this.username = username;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 	public String getComment() {
 		return comment;

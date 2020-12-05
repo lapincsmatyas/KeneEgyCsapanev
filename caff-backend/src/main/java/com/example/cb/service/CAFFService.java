@@ -1,13 +1,11 @@
 package com.example.cb.service;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.stream.Stream;
 
+import com.example.cb.model.Comment;
+import com.example.cb.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.example.cb.model.CAFF;
 import com.example.cb.repository.CAFFRepository;
@@ -15,29 +13,31 @@ import com.example.cb.repository.CAFFRepository;
 @Service
 public class CAFFService {
 	@Autowired
-	private CAFFRepository repo;
-	
-	public CAFF store(MultipartFile file, byte[] imgdata, String imguri) throws IOException{
-		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-		CAFF caff = new CAFF(fileName, file.getContentType(), file.getBytes(), imgdata, imguri);
-		return repo.save(caff);
-	}
-	
-	public CAFF getCAFF(Long id) {
-		return repo.findById(id).get();
-	}
-	
-	public Stream<CAFF> getAllCAFF(){
-		return repo.findAll().stream();
-	}
+	private CAFFRepository caffRepository;
 
-	public List<CAFF> getCAFFsByFilter(String namefilter) {
-		return repo.findByNameContainingIgnoreCase(namefilter);
-		
+	@Autowired
+	private CommentRepository commentRepository;
+
+	public List<CAFF> getAllCAFF(){
+		return caffRepository.findAll();
 	}
 
 	public void delete(CAFF caff) {
-		repo.delete(caff);
+		caffRepository.delete(caff);
 		
+	}
+
+	public CAFF getCAFFById(Long id) {
+		return caffRepository.findById(id).get();
+	}
+
+	public CAFF persistCAFF(CAFF caff){
+		return caffRepository.save(caff);
+	}
+
+	public Comment addCommentToCaff(CAFF caff, Comment comment) {
+		comment.setCaff(caff);
+		caffRepository.save(caff);
+		return commentRepository.save(comment);
 	}
 }

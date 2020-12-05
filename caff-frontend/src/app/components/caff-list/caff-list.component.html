@@ -12,3 +12,8 @@
     </div>
   </div>
 </div>
+
+<form>
+  <input type="file" id="file" required="" (change)="handleFileInput($event.target.files)" >
+  <input type="submit" value="Import File" id="" (click)="uploadFile()" />
+</form>
