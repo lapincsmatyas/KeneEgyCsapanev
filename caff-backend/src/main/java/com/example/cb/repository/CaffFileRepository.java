@@ -1,12 +1,10 @@
 package com.example.cb.repository;
 
-import java.util.List;
-
+import com.example.cb.model.CaffFile;
+import com.example.cb.model.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.cb.model.CAFF;
-
 @Repository
-public interface CAFFRepository extends JpaRepository<CAFF, Long> {
+public interface CaffFileRepository extends JpaRepository<CaffFile, Long> {
 }

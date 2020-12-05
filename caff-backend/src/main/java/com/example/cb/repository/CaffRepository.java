@@ -1,9 +1,10 @@
 package com.example.cb.repository;
 
-import com.example.cb.model.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com.example.cb.model.Caff;
+
 @Repository
-public interface CommentRepository extends JpaRepository<Comment, Long> {
+public interface CaffRepository extends JpaRepository<Caff, Long> {
 }

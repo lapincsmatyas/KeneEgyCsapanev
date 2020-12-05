@@ -6,10 +6,11 @@ import java.util.List;
 import javax.persistence.*;
 
 import com.example.cb.payload.CommentPayload;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "caffs")
-public class CAFF {
+public class Caff {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -21,15 +22,11 @@ public class CAFF {
     @OneToMany(mappedBy = "caff")
     private List<Comment> comments;
 
-    public CAFF(){
+    @OneToOne()
+    @JoinColumn(name = "file_id")
+    @JsonIgnore
+    private CaffFile file;
 
-    }
-
-    public CAFF(String name, String type, byte[] data, byte[] imgdata, String imguri, List<Comment> comments) {
-        this.name = name;
-        this.tags = tags;
-        this.comments = comments;
-    }
 
     public long getId() {
         return id;
@@ -50,5 +47,21 @@ public class CAFF {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    public CaffFile getFile() {
+        return file;
+    }
+
+    public void setFile(CaffFile file) {
+        this.file = file;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 }

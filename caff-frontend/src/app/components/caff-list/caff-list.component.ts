@@ -27,13 +27,13 @@ export class CaffListComponent implements OnInit {
     if(!this.fileToUpload)
       return;
 
-    this.caffService.uploadCaff(this.fileToUpload).subscribe( data => {
+    this.caffService.uploadCaff(this.fileToUpload).subscribe( (caff: Caff) => {
+      this.caffList.push(caff);
       }, error => {
         console.log(error);
       }
     )
   }
-
 
   handleFileInput(files: FileList) {
     this.fileToUpload = files.item(0);

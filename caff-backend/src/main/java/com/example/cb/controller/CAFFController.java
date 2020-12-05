@@ -1,9 +1,10 @@
 package com.example.cb.controller;
 
+import java.io.IOException;
 import java.util.List;
 
+import com.example.cb.model.CaffFile;
 import com.example.cb.model.Comment;
-import com.example.cb.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,23 +19,21 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.cb.model.CAFF;
+import com.example.cb.model.Caff;
 import com.example.cb.payload.CommentPayload;
-import com.example.cb.service.CAFFService;
+import com.example.cb.service.CaffService;
 
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/caff")
 public class CAFFController {
 	@Autowired
-	private CAFFService caffService;
+	private CaffService caffService;
 
-	@Autowired
-	private CommentService commentService;
 	
 	@PutMapping("/{id}/comment")
 	public Comment commentCAFF(@PathVariable Long id, @RequestBody CommentPayload commentPayload){
-		CAFF caff = caffService.getCAFFById(id);
+		Caff caff = caffService.getCAFFById(id);
 
 		Comment comment = new Comment();
 		comment.setUserName(commentPayload.getUserName());
@@ -67,8 +66,15 @@ public class CAFFController {
 	*/
 
 	@PostMapping("/upload")
-	public String uploadCaff(@RequestParam("file") MultipartFile file) {
-		return file.getName();
+	public Caff uploadCaff(@RequestParam("fileKey") MultipartFile file) {
+		try {
+			CaffFile caffFile = new CaffFile();
+			caffFile.setData(file.getBytes());
+			return caffService.uploadCaff(caffFile);
+		} catch (IOException exception) {
+			exception.printStackTrace();
+		}
+		return null;
 	}
 	
 	@GetMapping("/{id}/download")
@@ -78,12 +84,12 @@ public class CAFFController {
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<?> viewCAFF(@PathVariable Long id){
-		CAFF caff = caffService.getCAFFById(id);
+		Caff caff = caffService.getCAFFById(id);
 		return ResponseEntity.status(HttpStatus.OK).body(caff);
 	}
 	
 	@GetMapping("")
-	public ResponseEntity<List<CAFF>> listCAFF(){
+	public ResponseEntity<List<Caff>> listCAFF(){
 		return ResponseEntity.status(HttpStatus.OK).body(caffService.getAllCAFF());
 	}
 

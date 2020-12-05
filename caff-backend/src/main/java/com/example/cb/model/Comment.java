@@ -18,7 +18,7 @@ public class Comment {
 	@ManyToOne
 	@JoinColumn(name = "caff_id")
 	@JsonIgnore
-	private CAFF caff;
+	private Caff caff;
 	
 	public Comment() {}
 	public Comment(String userName, String comment) {
@@ -48,11 +48,11 @@ public class Comment {
 		return new CommentPayload(comment.getUserName(), comment.getComment());
 	}
 
-	public CAFF getCaff() {
+	public Caff getCaff() {
 		return caff;
 	}
 
-	public void setCaff(CAFF caff) {
+	public void setCaff(Caff caff) {
 		this.caff = caff;
 	}
 }
