@@ -1,19 +1,29 @@
 <h1>Caffs</h1>
 
-<div class="row card-deck">
-  <div class="col-3 card" *ngFor="let caff of caffList">
+<div *ngIf="!caffList" class="spinner-border" role="status">
+  <span class="sr-only">Loading...</span>
+</div>
+<div class="content" *ngIf="caffList">
+  <div class="row card-deck">
 
-
+    <div class="col-3 card" *ngFor="let caff of caffList">
       <h2 class="card-title"> {{caff.name}}</h2>
-      <img class="card-img-top" [src]="caff.preview" alt="Preview of caff"/>
+      <div *ngIf="!caff.preview" class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+      <img *ngIf="caff.preview" class="card-img-top" [src]="caff.preview" alt="Preview of caff"/>
 
-    <div class="card-body">
-      <a [routerLink]="['/caff', caff.id]" class="btn btn-primary float-right">Részletek</a>
+      <div class="card-body">
+        <a [routerLink]="['/caff', caff.id]" class="btn btn-primary float-right">Részletek</a>
+      </div>
     </div>
   </div>
-</div>
 
-<form>
-  <input type="file" id="file" required="" (change)="handleFileInput($event.target.files)" >
-  <input type="submit" value="Import File" id="" (click)="uploadFile()" />
-</form>
+  <form>
+    <input type="file" id="file" required="" (change)="handleFileInput($event.target.files)">
+    <input [disabled]="uploading" type="submit" value="Import File" id="" (click)="uploadFile()"/>
+  </form>
+  <span *ngIf="uploading" class="spinner-border" role="status">
+    <span class="sr-only">Loading...</span>
+  </span>
+</div>

@@ -33,7 +33,7 @@ struct BITMAPINFOHEADER {
 #pragma pack( pop )
 
 void BmpGenerator::voidGenerateBmp(std::string filename, Ciff ciff) {
-    cout << endl << "Starting BMP generation" << endl;
+    //cout << endl << "Starting BMP generation" << endl;
 
     ofstream ofs;
     ofs.open(filename + ".bmp");
@@ -62,6 +62,6 @@ void BmpGenerator::voidGenerateBmp(std::string filename, Ciff ciff) {
         for(int padding = 0; padding < pad; padding++) ofs << 0x00;
     }
 
-    cout << "BMP image generated with name " << filename << ".bmp" << endl;
+    //cout << "BMP image generated with name " << filename << ".bmp" << endl;
     ofs.close();
 }

@@ -27,6 +27,15 @@ public class Caff {
     @JsonIgnore
     private CaffFile file;
 
+    @Lob
+    private byte[] previewFile;
+
+    private int width;
+    private int height;
+
+    public Caff() {
+    }
+
 
     public long getId() {
         return id;
@@ -57,11 +66,35 @@ public class Caff {
         this.file = file;
     }
 
-    public String getTags() {
-        return tags;
+    public String[] getTags() {
+        return tags.split("$");
     }
 
     public void setTags(String tags) {
         this.tags = tags;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public byte[] getPreviewFile() {
+        return previewFile;
+    }
+
+    public void setPreviewFile(byte[] previewFile) {
+        this.previewFile = previewFile;
     }
 }

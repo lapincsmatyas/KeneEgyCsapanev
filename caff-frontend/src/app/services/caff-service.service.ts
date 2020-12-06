@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {Injectable, OnInit} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Caff} from "../models/caff";
 import {Observable} from "rxjs";
@@ -10,9 +10,11 @@ import {catchError, map} from "rxjs/operators";
 @Injectable({
   providedIn: 'root'
 })
-export class CaffService {
-
+export class CaffService implements OnInit{
   constructor(private http: HttpClient) {
+  }
+
+  ngOnInit(): void {
   }
 
   getAllCaffs(): Observable<Caff[]> {
@@ -33,4 +35,10 @@ export class CaffService {
     return this.http
       .post<Caff>(environment.authUrl + `/caff/upload`, formData)
   }
+
+  getCaffPreview(id: number): Observable<Blob> {
+    return this.http.get(environment.authUrl + `/caff/${id}/preview`, { responseType: 'blob' });
+  }
+
+
 }
