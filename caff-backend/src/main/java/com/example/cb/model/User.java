@@ -93,4 +93,7 @@ public class User {
     	}
     	return list;
     }
+
+    public void setId(Object o) {
+    }
 }
