@@ -1,26 +1,15 @@
 package com.example.cb.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.example.cb.model.MyUserDetails;
-import com.example.cb.model.Role;
-import com.example.cb.model.RoleEnum;
 import com.example.cb.model.User;
-import com.example.cb.payload.LoginRequest;
-import com.example.cb.payload.LoginResponse;
 import com.example.cb.payload.MessageResponse;
-import com.example.cb.payload.SignupRequest;
-import com.example.cb.repository.RoleRepository;
+import com.example.cb.payload.UserPayload;
 import com.example.cb.repository.UserRepository;
-import com.example.cb.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,14 +19,7 @@ public class UserService {
 	@Autowired
 	UserRepository userRepository;
 	@Autowired
-	RoleRepository roleRepository;
-	@Autowired
 	private PasswordEncoder encoder;
-	@Autowired
-	private AuthenticationManager authenticationManager;
-	@Autowired
-	private JwtUtil jwtUtil;
-
 
 	public List<User> findAll() {
 		return userRepository.findAll();
@@ -68,60 +50,49 @@ public class UserService {
 		return userRepository.findByEmail(email);
 	}
 
+	public ResponseEntity<?> getUserProfile(String username) {
+		MyUserDetails userDetails = (MyUserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-	public ResponseEntity<?> registerUser(SignupRequest signUpRequest){
-		if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-			return ResponseEntity
-					.badRequest()
-					.body(new MessageResponse("Error: Username is already taken!"));
-		}
+		if(!userDetails.getUsername().equals(username))
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MessageResponse("Other users are not available " + userDetails.getUsername()));
 
-		if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-			return ResponseEntity
-					.badRequest()
-					.body(new MessageResponse("Error: Email is already in use!"));
-		}
+		User user = null;
+		user = userRepository.findByUsername(username);
 
-		//create new user's account
-		User user = new User(signUpRequest.getUsername(),
-				signUpRequest.getEmail(),
-				encoder.encode(signUpRequest.getPassword()));
+		if(user==null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("User not found"));
 
-		//TODO: admin function
-		//set the roles
-		List<Role> roles = new ArrayList<>();
-		roles.add(roleRepository.findByName(RoleEnum.ROLE_USER).orElseThrow(()->new RuntimeException("Roles not found")));
+		UserPayload res = new UserPayload(
+				user.getUser_id(),
+				user.getUsername(),
+				user.getEmail(),
+				user.getPassword(),
+				user.getStrRoles());
 
-		//give the role to the user and save it
-		user.setRoles(roles);
-		userRepository.save(user);
-
-		return ResponseEntity.ok(new MessageResponse("User registered successfully!"));
+		return ResponseEntity.status(HttpStatus.OK).body(res);
 	}
 
+	public ResponseEntity<?> updateUserProfile(String username, UserPayload user) {
+		MyUserDetails userDetails = (MyUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
-	public ResponseEntity<?> loginUser(LoginRequest loginRequest) throws Exception {
-		Authentication authentication;
+		if(!userDetails.getUsername().equals(username)) return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MessageResponse("Other users are not available"));
 
-		//check username and password
-		try {
-			authentication = authenticationManager.authenticate(
-					new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+		User userdb = null;
+		userdb = userRepository.findByUsername(user.getUsername());
 
-		} catch (BadCredentialsException e) {
-			throw new Exception("Incorrect username or password", e);
-		}
+		if(userdb!=null && !userDetails.getUsername().equals(user.getUsername())) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Username is already taken"));
+		userdb = userRepository.findByEmail(user.getEmail());
 
-		//if the credentials are correct, authenticate the user and generate a token for it
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		String jwt = jwtUtil.generateJwtToken(authentication);
+		if(userdb!=null && !userDetails.getUser().getEmail().equals(user.getEmail())) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Email is already in use"));
+		userdb = userRepository.findByUsername(username);
 
-		//cast the user to MyUserDetails and set the roles
-		MyUserDetails userDetails = (MyUserDetails) authentication.getPrincipal();
-		List<String> roles = userDetails.getAuthorities().stream()
-				.map(item -> item.getAuthority())
-				.collect(Collectors.toList());
+		if(userdb==null) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("User not found"));
 
-		return ResponseEntity.ok(new LoginResponse(jwt, userDetails.getUser().getUser_id(), userDetails.getUsername(), userDetails.getUser().getEmail(), roles));
+		userdb.setUsername(user.getUsername());
+		userdb.setEmail(user.getEmail());
+		userdb.setPassword(encoder.encode(user.getPassword()));
+
+		userRepository.save(userdb);
+
+		return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("User was updated successfully, please log in again"));
 	}
 }

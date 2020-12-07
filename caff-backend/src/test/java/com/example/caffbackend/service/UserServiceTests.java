@@ -1,98 +1,51 @@
 package com.example.caffbackend.service;
 
 import com.example.cb.CaffBackendApplication;
+import com.example.cb.model.MyUserDetails;
 import com.example.cb.model.User;
-import com.example.cb.payload.SignupRequest;
 import com.example.cb.repository.UserRepository;
 import com.example.cb.service.UserService;
-import com.example.cb.util.JwtUtil;
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
 import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
 @SpringBootTest(classes = CaffBackendApplication.class)
 public class UserServiceTests {
 
     @Mock
     private UserRepository userRepository;
+    @Mock
+    private MyUserDetails myUserDetails;
     @InjectMocks
     private UserService userService;
     @InjectMocks
     private User user;
-    @Mock
-    private AuthenticationManager authenticationManager;
-    @Mock
-    private JwtUtil jwtUtil;
+    @Autowired
+    private WebApplicationContext context;
 
 
-    @Test
-    void testRegisterWithExistedEmail() {
-        SignupRequest signupRequest = new SignupRequest("username", "email@email.com", "psw");
+    private MockMvc mvc;
 
-        when(userRepository.existsByEmail("email@email.com")).thenReturn(true);
-
-        ResponseEntity<?> responseEntity = userService.registerUser(signupRequest);
-
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
+    @Before
+    public void setup() {
+        mvc = MockMvcBuilders
+                .webAppContextSetup(context)
+                .apply(springSecurity())
+                .build();
     }
-
-    @Test
-    void testRegisterWithExistedPassword() {
-        SignupRequest signupRequest = new SignupRequest("username", "email@email.com", "psw");
-
-        when(userRepository.existsByUsername("username")).thenReturn(true);
-
-        ResponseEntity<?> responseEntity = userService.registerUser(signupRequest);
-
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-    }
-
-    /*
-    @Test
-    void testLogin() throws Exception {
-        LoginRequest loginRequest = new LoginRequest("username", "psw");
-        Role role = new Role(RoleEnum.ROLE_USER);
-        List<Role> roles = new ArrayList<>();
-        roles.add(role);
-
-        user.setId(1);
-        user.setEmail("email@email.com");
-        user.setUsername("username");
-        user.setRoles(roles);
-        user.setPassword("psw");
-
-        when(userRepository.findByEmail(anyString())).thenReturn(user);
-        when(userRepository.save(user)).thenReturn(user);
-
-        ResponseEntity<?> responseEntity = userService.loginUser(loginRequest);
-
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
-    }
-
-    @Test
-    void testLoginWithEmptyUser() throws Exception {
-        LoginRequest loginRequest = new LoginRequest("username", "psw");
-
-        Authentication authentication = Mockito.mock(Authentication.class);
-        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
-        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
-        SecurityContextHolder.setContext(securityContext);
-
-        when(userRepository.findByUsername(loginRequest.getUsername())).thenReturn(null);
-
-        ResponseEntity<?> responseEntity = userService.loginUser(loginRequest);
-
-        assertEquals(HttpStatus.BAD_REQUEST, responseEntity.getStatusCode());
-    }*/
 
     @Test
     void testFindById() {
@@ -141,4 +94,27 @@ public class UserServiceTests {
 
         assertEquals(2, userList.size());
     }
+
+    /*@Test
+    void testGetUserProfile(){
+        Authentication auth = Mockito.mock(Authentication.class);
+        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
+        Mockito.when(securityContext.getAuthentication()).thenReturn(auth);
+        SecurityContextHolder.setContext(securityContext);
+        MyUserDetails myUserDetails = Mockito.mock(MyUserDetails.class);
+
+        User profile = new User("user", "user@gmail.com", "psw");
+
+        //when(myUserDetails.getUser()).thenReturn(profile);
+
+        ResponseEntity<?> responseEntity = userService.getUserProfile(profile.getUsername());
+
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+    }*/
+
+   /* @Test
+    void testUpdateUserProfile(){
+
+    }*/
+
 }
