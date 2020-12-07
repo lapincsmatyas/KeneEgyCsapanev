@@ -5,6 +5,7 @@ import {catchError, map} from "rxjs/operators";
 import {HttpErrorResponse, HttpEventType} from "@angular/common/http";
 import {of} from "rxjs";
 import {DomSanitizer} from "@angular/platform-browser";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-caff-list',
@@ -16,7 +17,7 @@ export class CaffListComponent implements OnInit {
   private fileToUpload: File = null;
   public uploading = false;
 
-  constructor(private caffService: CaffService, private sanitizer: DomSanitizer) {
+  constructor(private caffService: CaffService, private sanitizer: DomSanitizer, private toastr: ToastrService) {
   }
 
   ngOnInit(): void {
@@ -32,23 +33,24 @@ export class CaffListComponent implements OnInit {
   }
 
   uploadFile() {
-    if(!this.fileToUpload)
+    if (!this.fileToUpload)
       return;
 
     this.uploading = true;
-    this.caffService.uploadCaff(this.fileToUpload).subscribe( (caff: Caff) => {
-      this.caffList.push(caff);
-      this.uploading = false;
-      this.caffService.getCaffPreview(caff.id).subscribe((preview) => {
-        let objectURL = URL.createObjectURL(preview);
-        caff.preview = this.sanitizer.bypassSecurityTrustUrl(objectURL);
-      }, error => {
-        alert("Something went wrong downloading the preview image :(");
+    this.caffService.uploadCaff(this.fileToUpload).subscribe((caff: Caff) => {
+        this.caffList.push(caff);
         this.uploading = false;
-      })
+        this.caffService.getCaffPreview(caff.id).subscribe((preview) => {
+          let objectURL = URL.createObjectURL(preview);
+          caff.preview = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+          this.toastr.success("CAFF uploaded");
+        }, error => {
+          this.toastr.error("Something went wrong downloading the preview image :(");
+          this.uploading = false;
+        })
       }, error => {
-        alert("Something went wrong during the upload :( ");
-      this.uploading = false;
+        this.uploading = false;
+        this.toastr.error("Something went wrong during the upload :( ");
       }
     )
   }

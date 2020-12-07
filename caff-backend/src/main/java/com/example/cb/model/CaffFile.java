@@ -11,6 +11,7 @@ public class CaffFile {
     @Column(name = "caff_file_id")
     private int id;
 
+    @Basic(fetch = FetchType.LAZY)
     @Lob
     private byte[] data;
 

@@ -40,5 +40,7 @@ export class CaffService implements OnInit{
     return this.http.get(environment.authUrl + `/caff/${id}/preview`, { responseType: 'blob' });
   }
 
-
+  downloadCaff(id: number): Observable<Blob> {
+    return this.http.get(environment.authUrl + `/caff/${id}/download`, { responseType: 'blob' });
+  }
 }

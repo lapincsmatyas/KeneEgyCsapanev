@@ -1,8 +1,11 @@
 <div *ngIf="caff" class="caff">
   Id: {{caff.id}}<br/>
   Name: {{caff.name}}<br/>
-  <img [src]="caff.preview" alt="Preview of caff"/><br/>
-  Comments:
+  <div *ngIf="!caff.preview" class="spinner-border" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+  <img *ngIf="caff.preview" class="preview-image" [src]="caff.preview" alt="Preview of caff"/>
+  <p>Comments:</p>
   <ul>
     <li *ngFor="let comment of caff.comments">
       Id: {{comment.id}}<br/>
@@ -10,10 +13,9 @@
       Comment: {{comment.comment}}<br/>
     </li>
   </ul>
-  <input type="text" [(ngModel)]="comment.comment" placeholder="Írj kommentet">
+  <input type="text" [(ngModel)]="comment.comment" placeholder="Write a comment: ">
+    <button class="btn btn-success" (click)="addComment()">Add comment</button>
     <br/>
-    <button class="btn btn-success" (click)="addComment()">Komment</button>
-    <br/>
-  <button class="btn btn-success" (click)="addCaffToCart()">Kosárba</button>
+  <button class="btn btn-success" (click)="downloadCaff()">Download</button>
   <br/>
 </div>

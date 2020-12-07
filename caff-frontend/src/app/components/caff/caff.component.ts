@@ -5,6 +5,9 @@ import {Caff} from "../../models/caff";
 import {CartService} from "../../services/cart.service";
 import {Comment} from 'src/app/models/comment';
 import {AuthService} from 'src/app/services/auth.service';
+import {DomSanitizer} from "@angular/platform-browser";
+import {saveAs} from "file-saver";
+
 
 @Component({
   selector: 'app-caff',
@@ -21,23 +24,26 @@ export class CaffComponent implements OnInit {
   constructor(private caffService: CaffService,
               private cartService: CartService,
               private route: ActivatedRoute,
-              private authService: AuthService
+              private authService: AuthService,
+              private sanitizer: DomSanitizer
   ) {
 
   }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
-      this.caffService.getCaffById(+params['id']).subscribe(result => {
-        this.caff = result;
+      this.caffService.getCaffById(+params['id']).subscribe(caff => {
+        this.caff = caff;
+        this.caffService.getCaffPreview(caff.id).subscribe((preview) => {
+          let objectURL = URL.createObjectURL(preview);
+          caff.preview = this.sanitizer.bypassSecurityTrustUrl(objectURL);
+        }, error => {
+          alert("Something went wrong downloading the preview image :(");
+        })
       })
     });
   }
 
-  addCaffToCart() {
-    this.cartService.addCaffToCart(this.caff);
-    console.log(this.cartService.cart);
-  }
 
   addComment() {
     this.comment.userName = this.authService.getCurrentUser().username;
@@ -48,4 +54,9 @@ export class CaffComponent implements OnInit {
     this.comment.comment = "";
   }
 
+  downloadCaff() {
+    this.caffService.downloadCaff(this.caff.id).subscribe( data => {
+        saveAs(data, "download.caff");
+    });
+  }
 }

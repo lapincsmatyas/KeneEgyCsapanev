@@ -6,16 +6,11 @@
     <li *ngIf="authService.isLoggedIn" class="nav-item" routerLinkActive="active">
       <a class="nav-link" routerLink="/caffs">Caffs</a>
     </li>
-    <li *ngIf="!authService.isLoggedIn" class="nav-item" routerLinkActive="active">
-      <a class="nav-link" routerLink="/register">Register</a>
-    </li>
-    <li *ngIf="!authService.isLoggedIn" class="nav-item" routerLinkActive="active">
-      <a class="nav-link" routerLink="/login">Login</a>
-    </li>
+    <!--
     <li *ngIf="authService.isLoggedIn" class="nav-item" routerLinkActive="active">
       <a class="nav-link" routerLink="/cart">Kosár</a>
-    </li>
-    <li *ngIf="authService.isLoggedIn" class="nav-item" routerLinkActive="active">
+    </li>-->
+    <li *ngIf="authService.isAdmin()" class="nav-item" routerLinkActive="active">
       <a class="nav-link" routerLink="/admin">Admin</a>
     </li>
 
