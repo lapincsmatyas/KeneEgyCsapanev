@@ -6,7 +6,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.example.cb.controller.*;
+import com.example.cb.controller.AdminController;
+import com.example.cb.controller.AuthController;
+import com.example.cb.controller.CAFFController;
+import com.example.cb.controller.UserController;
+import com.example.cb.service.*;
 
 @SpringBootTest
 public class CaffBackendApplicationTests {

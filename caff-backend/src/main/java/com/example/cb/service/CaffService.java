@@ -97,8 +97,8 @@ public class CaffService {
         return null;
     }
 
-    public Caff getCAFFById(Long id) {
-        return caffRepository.findById(id).get();
+    public Caff getCAFFById(long id) {
+        return caffRepository.findById(id);
     }
 
     public Caff persistCAFF(Caff caff) {
@@ -111,7 +111,7 @@ public class CaffService {
         return commentRepository.save(comment);
     }
 
-    public byte[] getPreviewOfCaff(Long id) {
-        return caffRepository.findById(id).get().getPreviewFile();
+    public byte[] getPreviewOfCaff(long id) {
+        return caffRepository.findById(id).getPreviewFile();
     }
 }
