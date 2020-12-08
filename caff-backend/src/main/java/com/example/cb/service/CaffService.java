@@ -1,12 +1,11 @@
 package com.example.cb.service;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Blob;
 import java.text.ParseException;
 import java.util.Collection;
@@ -19,6 +18,8 @@ import com.example.cb.model.Comment;
 import com.example.cb.repository.CaffFileRepository;
 import com.example.cb.repository.CaffWithoutDataRepository;
 import com.example.cb.repository.CommentRepository;
+import com.example.cb.util.Md5Generator;
+import org.aspectj.bridge.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,7 @@ public class CaffService {
     public Caff uploadCaff(CaffFile caffFile) throws ParseException {
         try {
             Caff caff = parseCaff(caffFile);
+            caff.setFileMd5(Md5Generator.getMd5OfByteArray(caffFile.getData()));
             caffRepository.save(caff);
             caffFileRepository.save(caffFile);
 
@@ -75,16 +77,20 @@ public class CaffService {
 
     private Caff parseCaff(CaffFile caffFile) throws ParseException {
         try {
-            String[] command = {"./caff_parser/src/output", "./temp", "generated"};
+            String parserURI = "./caff_parser/src/output.exe";
+            String md5 = Md5Generator.getMd5OfFile(parserURI);
+            if (!"ae8a417509c88f61d7c0c799c68a47fb".equals(md5)) {
+                throw new SecurityException("The parser has been tampered");
+            }
+            String[] command = {parserURI, "./temp", "generated"};
             Files.write(Paths.get("temp"), caffFile.getData());
             return execCmd(command);
         } catch (IOException e) {
             logger.error("Could not save the preview image");
-            e.printStackTrace();
-        } catch (
-                InterruptedException e) {
+        } catch (InterruptedException e) {
             logger.error("There was an error during the execution of the parse process");
-            e.printStackTrace();
+        } catch (SecurityException e) {
+            logger.error("There was an error during MD5 check", e.getMessage());
         }
         return null;
     }
@@ -94,9 +100,9 @@ public class CaffService {
         Process process = new ProcessBuilder(command).start();
 
         Scanner error = new Scanner(process.getErrorStream());
-        String errorMessage = "";
+        StringBuilder errorMessage = new StringBuilder();
         while (error.hasNextLine()) {
-            errorMessage += error.nextLine();
+            errorMessage.append(error.nextLine());
         }
 
         process.waitFor();
@@ -113,7 +119,7 @@ public class CaffService {
                 return caff;
             }
         } else {
-            throw new ParseException(errorMessage, 0);
+            throw new ParseException(errorMessage.toString(), 0);
         }
     }
 
@@ -139,7 +145,12 @@ public class CaffService {
         return caffWithoutDataRepository.findAll();
     }
 
-    public byte[] getCaffFileById(String id) {
+    public byte[] getCaffFileById(String id) throws SecurityException {
+        Caff caff = caffRepository.findById(Long.parseLong(id)).get();
+        String fileMd5 = Md5Generator.getMd5OfByteArray(caff.getFile().getData());
+        if(!fileMd5.equals(caff.getFileMd5()))
+            throw new SecurityException("The file hash has changed");
+
         return caffRepository.findById(Long.parseLong(id)).get().getFile().getData();
     }
 }

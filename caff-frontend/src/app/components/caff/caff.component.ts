@@ -7,6 +7,7 @@ import {Comment} from 'src/app/models/comment';
 import {AuthService} from 'src/app/services/auth.service';
 import {DomSanitizer} from "@angular/platform-browser";
 import {saveAs} from "file-saver";
+import {ToastrService} from "ngx-toastr";
 
 
 @Component({
@@ -25,7 +26,8 @@ export class CaffComponent implements OnInit {
               private cartService: CartService,
               private route: ActivatedRoute,
               private authService: AuthService,
-              private sanitizer: DomSanitizer
+              private sanitizer: DomSanitizer,
+              private toastr: ToastrService
   ) {
 
   }
@@ -38,7 +40,7 @@ export class CaffComponent implements OnInit {
           let objectURL = URL.createObjectURL(preview);
           caff.preview = this.sanitizer.bypassSecurityTrustUrl(objectURL);
         }, error => {
-          alert("Something went wrong downloading the preview image :(");
+          this.toastr.warning("Something went wrong downloading the preview image :(");
         })
       })
     });
@@ -55,8 +57,11 @@ export class CaffComponent implements OnInit {
   }
 
   downloadCaff() {
-    this.caffService.downloadCaff(this.caff.id).subscribe( data => {
+    this.caffService.downloadCaff(this.caff.id).subscribe(data => {
         saveAs(data, "download.caff");
-    });
+      }, error => {
+        this.toastr.error("Something went wrong downloading the image :(");
+      }
+    );
   }
 }

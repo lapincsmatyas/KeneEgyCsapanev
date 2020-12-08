@@ -30,6 +30,8 @@ public class Caff {
     @Lob
     private byte[] previewFile;
 
+    private String fileMd5;
+
     private int width;
     private int height;
 
@@ -96,5 +98,13 @@ public class Caff {
 
     public void setPreviewFile(byte[] previewFile) {
         this.previewFile = previewFile;
+    }
+
+    public String getFileMd5() {
+        return fileMd5;
+    }
+
+    public void setFileMd5(String fileMd5) {
+        this.fileMd5 = fileMd5;
     }
 }

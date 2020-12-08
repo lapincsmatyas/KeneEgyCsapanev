@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import com.example.cb.model.CaffFile;
 import com.example.cb.model.Comment;
 import com.example.cb.payload.CaffListItem;
+import com.example.cb.util.Md5Generator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +59,7 @@ public class CAFFController {
         try {
             CaffFile caffFile = new CaffFile();
             caffFile.setData(file.getBytes());
+
             return ResponseEntity.status(HttpStatus.OK).body(caffService.uploadCaff(caffFile));
         } catch (IOException | ParseException exception) {
             logger.error("Unsuccessful caff upload");
@@ -68,7 +70,13 @@ public class CAFFController {
     @GetMapping("/{id}/download")
     public ResponseEntity<byte[]> downloadCAFF(@PathVariable String id) {
         logger.info("CAFF download started with id: " + id);
-        return ResponseEntity.status(HttpStatus.OK).body(caffService.getCaffFileById(id));
+        try {
+            byte[] data = caffService.getCaffFileById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(data);
+        } catch (SecurityException e) {
+            logger.error("There was an error during retrieving the data: ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     @GetMapping("/{id}")
