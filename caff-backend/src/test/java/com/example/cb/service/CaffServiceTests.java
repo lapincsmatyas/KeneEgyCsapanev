@@ -1,11 +1,14 @@
 package com.example.cb.service;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 
 import com.example.cb.controller.*;
 import com.example.cb.model.*;
@@ -15,6 +18,12 @@ import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.ParseException;
 import java.util.List;
 
 @SpringBootTest
@@ -32,7 +41,9 @@ public class CaffServiceTests {
 	@InjectMocks
 	private Caff caff;
 	@Mock
-	private CaffFileRepository fileRepo;
+	private CaffFileRepository caffFileRepo;
+	@Mock
+	private CaffWithoutDataRepository caffWithoutDataRepo;
 	@Mock
 	private CommentService commentService;
 	@Mock
@@ -42,10 +53,65 @@ public class CaffServiceTests {
 		MockitoAnnotations.initMocks(this);
 	}
 	
-	/*@Test
-	public void testUploadCaff() {
-		
-	}*/
+	@Test //output nélkül hibával elszáll
+	void testUploadCaff() throws ParseException, IOException {
+		CaffFile caffFile = new CaffFile();
+		String path = "src/test/java/com/example/cb/service/test_caff/1.caff";
+		File file = new File(path);
+		InputStream is = new FileInputStream(file);
+		byte[] fileBytes = is.readAllBytes();
+		MockMultipartFile multipartFile = new MockMultipartFile("caffFile", "1.caff", MediaType.TEXT_PLAIN_VALUE, fileBytes);
+		caffFile.setData(multipartFile.getBytes());
+		when(caffRepo.save(caff)).thenReturn(caff);
+		when(caffFileRepo.save(caffFile)).thenReturn(caffFile);
+		Caff responseCaff = caffService.uploadCaff(caffFile);
+		assertNotNull(responseCaff);
+	}
+	
+	@Test //output nélkül hibával elszáll
+	void testUploadInvalidCaff() throws ParseException, IOException {
+		CaffFile caffFile = new CaffFile();
+		String path = "src/test/java/com/example/cb/service/test_caff/invalid.caff";
+		File file = new File(path);
+		InputStream is = new FileInputStream(file);
+		byte[] fileBytes = is.readAllBytes();
+		MockMultipartFile multipartFile = new MockMultipartFile("caffFile", "invalid.caff", MediaType.TEXT_PLAIN_VALUE, fileBytes);
+		caffFile.setData(multipartFile.getBytes());
+		when(caffService.uploadCaff(caffFile)).thenThrow(new ParseException("error", 0));
+		when(caffRepo.save(caff)).thenReturn(caff);
+		when(caffFileRepo.save(caffFile)).thenReturn(caffFile);
+		//Caff responseCaff = caffService.uploadCaff(caffFile);
+		Assertions.assertThrows(ParseException.class, ()->caffService.uploadCaff(caffFile));
+	}
+	
+	@Test
+	void testGetPreviewOfCaff() {
+		byte[] caffPreview = new byte[0];
+		caff.setPreviewFile(caffPreview);
+		when(caffRepo.findById(anyLong())).thenReturn(caff);
+		byte[] responseCaffPreview = caffService.getPreviewOfCaff(1);
+		assertEquals(caffPreview, responseCaffPreview);
+	}
+	
+	@Test
+	void testGetAllCAFFWithoutData() {
+		CaffWithoutData cwd1 = new CaffWithoutData();
+		CaffWithoutData cwd2 = new CaffWithoutData();
+		when(caffWithoutDataRepo.findAll()).thenReturn(List.of(cwd1, cwd2));
+		List<CaffWithoutData> list = caffService.getAllCAFFWithoutData();
+		assertEquals(2, list.size());
+	}
+	
+	@Test
+	void testGetCaffFileById() {
+		CaffFile caffFile = new CaffFile();
+		byte[] caffFileData = new byte[0];
+		caffFile.setData(caffFileData);
+		caff.setFile(caffFile);
+		when(caffRepo.findById(anyLong())).thenReturn(caff);
+		byte[] responseData = caffService.getCaffFileById("1");
+		assertEquals(caffFileData, responseData);
+	}
 	
 	@Test
 	void testGetAllCAFF() {
