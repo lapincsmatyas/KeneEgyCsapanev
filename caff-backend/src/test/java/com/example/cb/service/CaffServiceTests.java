@@ -32,8 +32,6 @@ public class CaffServiceTests {
 	private UserRepository userRepo;
 	@InjectMocks
 	private UserServiceImpl userService;
-	@InjectMocks
-	private CAFFController caffController;
 	@Mock
 	private CaffRepository caffRepo;
 	@InjectMocks
@@ -135,38 +133,29 @@ public class CaffServiceTests {
 		assertNull(foundCaff);
 	}
 	
-	/*@Test
+	@Test
 	void testPersistCAFF() {
 		caffService.delete(caff);
 		Caff newCaff = new Caff();
-		caffService.persistCAFF(newCaff);
-		when(caffRepo.findById(anyLong())).thenReturn(newCaff);
-		Caff foundCaff = caffService.getCAFFById(newCaff.getId());
+		when(caffRepo.save(newCaff)).thenReturn(newCaff);
+		Caff foundCaff = caffService.persistCAFF(newCaff);
 		assertEquals(newCaff, foundCaff);
 	}
 	
 	@Test
 	void testDeleteCAFF() {
+		when(caffRepo.findById(anyLong())).thenReturn(null);
 		caffService.delete(caff);
-		Caff foundCaff = caffService.getCAFFById(caff.getId());
-		System.out.println(caff.getId());
-		assertEquals(foundCaff, null);
-	}*/
+		Caff foundCaff = caffService.getCAFFById(1);
+		assertNull(foundCaff);
+	}
 	
 	@Test
-	void testCommentCAFF() {
-		CommentPayload comment = new CommentPayload("username", "comment");
-		when(caffService.getCAFFById(anyLong())).thenReturn(caff);
-		when(caffRepo.findById(anyLong())).thenReturn(caff);
-		Comment responseComment = caffController.commentCAFF((long)1, comment);
-		assertEquals(responseComment.getComment(), comment.getComment());
-		
-		/*Comment comment = new Comment("username", "comment");
-		comment.setCaff(caff);
+	void testAddCommentToCaff() {
+		Comment comment = new Comment("username", "comment");
+		when(caffRepo.save(caff)).thenReturn(caff);
+		when(commentRepo.save(comment)).thenReturn(comment);
 		Comment savedComment = caffService.addCommentToCaff(caff, comment);
-		savedComment=commentRepo.save(comment);
-		when(caffRepo.findById(anyLong())).thenReturn(caff);
-		Caff foundCaff = caffService.getCAFFById(1);
-		assertEquals(savedComment, comment);*/
+		assertEquals(savedComment, comment);
 	}
 }
