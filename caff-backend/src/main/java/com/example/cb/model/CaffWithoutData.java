@@ -19,7 +19,6 @@ public class CaffWithoutData {
     @OneToMany(mappedBy = "caff")
     private List<Comment> comments;
 
-
     private int width;
     private int height;
 

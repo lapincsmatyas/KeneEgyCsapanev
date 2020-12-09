@@ -17,7 +17,6 @@ public class Md5Generator {
 
             while ((bytesCount = fis.read(byteArray)) != -1) {
                 digest.update(byteArray, 0, bytesCount);
-
             }
 
             byte[] bytes = digest.digest();

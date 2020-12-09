@@ -35,7 +35,7 @@ public class CaffServiceTests {
 	@Mock
 	private UserRepository userRepo;
 	@InjectMocks
-	private UserServiceImpl userService;
+	private UserService userService;
 	@Mock
 	private CaffRepository caffRepo;
 	@InjectMocks
@@ -69,21 +69,7 @@ public class CaffServiceTests {
 		Caff responseCaff = caffService.uploadCaff(caffFile);
 		assertNotNull(responseCaff);
 	}
-	
-	/*@Test //output nélkül hibával elszáll
-	void testUploadInvalidCaff() throws ParseException, IOException {
-		CaffFile caffFile = new CaffFile();
-		String path = "src/test/java/com/example/cb/service/test_caff/invalid.caff";
-		File file = new File(path);
-		InputStream is = new FileInputStream(file);
-		byte[] fileBytes = is.readAllBytes();
-		MockMultipartFile multipartFile = new MockMultipartFile("caffFile", "invalid.caff", MediaType.TEXT_PLAIN_VALUE, fileBytes);
-		caffFile.setData(multipartFile.getBytes());
-		when(caffService.uploadCaff(caffFile)).thenThrow(new ParseException("error", 0));
-		when(caffRepo.save(caff)).thenReturn(caff);
-		when(caffFileRepo.save(caffFile)).thenReturn(caffFile);
-		Assertions.assertThrows(ParseException.class, ()->caffService.uploadCaff(caffFile));
-	}*/
+
 	
 	@Test
 	void testGetPreviewOfCaff() {

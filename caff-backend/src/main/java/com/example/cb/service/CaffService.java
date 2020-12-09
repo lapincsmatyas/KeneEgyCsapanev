@@ -82,8 +82,8 @@ public class CaffService {
             if (!"ae8a417509c88f61d7c0c799c68a47fb".equals(md5)) {
                 throw new SecurityException("The parser has been tampered");
             }
-            String[] command = {parserURI, "./temp", "generated"};
             Files.write(Paths.get("temp"), caffFile.getData());
+            String[] command = {parserURI, "./temp", "generated"};
             return execCmd(command);
         } catch (IOException e) {
             logger.error("Could not save the preview image");
