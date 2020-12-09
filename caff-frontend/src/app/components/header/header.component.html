@@ -3,8 +3,11 @@
     <li class="nav-item" routerLinkActive="active">
       <a class="nav-link" routerLink="/home">Home</a>
     </li>
-    <li *ngIf="authService.isLoggedIn" class="nav-item" routerLinkActive="active">
+    <li *ngIf="authService.isLoggedIn()" class="nav-item" routerLinkActive="active">
       <a class="nav-link" routerLink="/caffs">Caffs</a>
+    </li>
+    <li *ngIf="!authService.isLoggedIn()" class="nav-item" routerLinkActive="active">
+      <a class="nav-link" routerLink="/login">Login</a>
     </li>
     <!--
     <li *ngIf="authService.isLoggedIn" class="nav-item" routerLinkActive="active">

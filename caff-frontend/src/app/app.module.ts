@@ -27,8 +27,8 @@ import {ToastrModule} from "ngx-toastr";
 import {AdminGuard} from "./helpers/admin-guard";
 
 const routers: Routes = [
-  {path: 'header', component: HeaderComponent,},
-  { path: 'home', component: HomeComponent, canActivate: [AuthGuard]},
+  {path: 'header', component: HeaderComponent},
+  { path: 'home', component: HomeComponent},
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent },
   { path: 'logout', component: LogoutComponent},
