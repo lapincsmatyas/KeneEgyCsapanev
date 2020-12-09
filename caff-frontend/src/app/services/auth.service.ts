@@ -35,7 +35,7 @@ const httpOptions = {
 
     logout() {
       this.tokenStorage.logout();
-      this.router.navigateByUrl('/home');
+      this.router.navigateByUrl('/login');
     }
 
     register(user): Observable<any> {

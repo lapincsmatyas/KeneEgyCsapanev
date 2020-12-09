@@ -9,10 +9,8 @@ import {MatIconModule} from "@angular/material/icon"
 
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { HeaderComponent } from './components/header/header.component';
-import { LogoutComponent } from './components/logout/logout.component';
 
 import { RegisterComponent } from './components/register/register.component';
 import { authInterceptorProviders } from './helpers/auth.interceptor';
@@ -28,26 +26,23 @@ import {AdminGuard} from "./helpers/admin-guard";
 
 const routers: Routes = [
   {path: 'header', component: HeaderComponent},
-  { path: 'home', component: HomeComponent},
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent },
-  { path: 'logout', component: LogoutComponent},
+
   { path: 'profile/:username', component: ProfileComponent, canActivate: [AuthGuard]},
   { path: 'admin', component: AdminComponent, canActivate: [AdminGuard]},
 
   { path: 'caffs', component: CaffListComponent, canActivate: [AuthGuard]},
   { path: 'caff/:id', component: CaffComponent, canActivate: [AuthGuard]},
-  { path: '**', redirectTo: "home"}
+  { path: '**', redirectTo: "caffs"}
 ];
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    HomeComponent,
     LoginComponent,
     RegisterComponent,
-    LogoutComponent,
     CaffListComponent,
     CaffComponent,
     CartComponent,
