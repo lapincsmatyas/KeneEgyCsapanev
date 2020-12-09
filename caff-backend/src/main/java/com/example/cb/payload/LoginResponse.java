@@ -13,6 +13,8 @@ public class LoginResponse {
     private final List<String> roles;
 
 
+
+
     public LoginResponse(String jwt, Long id, String username, String email, List<String> roles) {
         this.jwt = jwt;
         this.id = id;
