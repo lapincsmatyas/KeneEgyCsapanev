@@ -33,10 +33,6 @@ import java.util.Optional;
 @SpringBootTest
 public class CaffServiceTests {
 	@Mock
-	private UserRepository userRepo;
-	@InjectMocks
-	private UserServiceImpl userService;
-	@Mock
 	private CaffRepository caffRepo;
 	@InjectMocks
 	private CaffService caffService;
