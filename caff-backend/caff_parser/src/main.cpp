@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
         file_name = argv[1];
         output_file_name = argv[2];
     } else {
-        cout << "Invalid arguments";
+        cout << "Not enough arguments: " << argc;
         return 1;
     }
 
@@ -29,11 +29,16 @@ int main(int argc, char *argv[]) {
         caffParser.parseCaff();
 
         BmpGenerator bmpGenerator{};
-        if(!caffParser.ciffs.empty())
+        if(!caffParser.ciffs.empty()) {
+            Ciff ciff = caffParser.ciffs[0];
             bmpGenerator.voidGenerateBmp(output_file_name, caffParser.ciffs[0]);
+
+            cout << ciff.caption << ";" << ciff.tags << ";" << ciff.width << ";" << ciff.height;
+        }
     }
     catch (invalid_argument& e) {
-        cout << "Error during parsing: " << e.what();
+        cerr << "Error during parsing: " << e.what();
+        return 1;
     }
 
     return 0;

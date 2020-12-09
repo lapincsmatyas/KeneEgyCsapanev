@@ -5,3 +5,7 @@
 button {
   margin-bottom: 40px;
 }
+
+.preview-image{
+  max-width: 300px;
+}

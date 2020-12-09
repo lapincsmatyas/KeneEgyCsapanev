@@ -1,6 +1,7 @@
 package com.example.cb.model;
 
 import com.example.cb.payload.CommentPayload;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
@@ -9,27 +10,32 @@ import javax.persistence.*;
 public class Comment {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="comment_id")
-	private long commentid;
-	private String username;
+	private long id;
+
+	private String userName;
 	private String comment;
+
+	@ManyToOne
+	@JoinColumn(name = "caff_id")
+	@JsonIgnore
+	private Caff caff;
 	
 	public Comment() {}
-	public Comment(String username, String comment) {
-		this.username = username;
+	public Comment(String userName, String comment) {
+		this.userName = userName;
 		this.comment = comment;
 	}
-	public long getCommentid() {
-		return commentid;
+	public long getId() {
+		return id;
 	}
-	public void setCommentid(long commentid) {
-		this.commentid = commentid;
+	public void setId(long commentid) {
+		this.id = commentid;
 	}
-	public String getUsername() {
-		return username;
+	public String getUserName() {
+		return userName;
 	}
-	public void setUsername(String username) {
-		this.username = username;
+	public void setUserName(String username) {
+		this.userName = username;
 	}
 	public String getComment() {
 		return comment;
@@ -39,6 +45,14 @@ public class Comment {
 	}
 
 	public CommentPayload commentToPayload(Comment comment){
-		return new CommentPayload(comment.getUsername(), comment.getComment());
+		return new CommentPayload(comment.getUserName(), comment.getComment());
+	}
+
+	public Caff getCaff() {
+		return caff;
+	}
+
+	public void setCaff(Caff caff) {
+		this.caff = caff;
 	}
 }

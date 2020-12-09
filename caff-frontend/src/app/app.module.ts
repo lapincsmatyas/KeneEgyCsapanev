@@ -23,6 +23,8 @@ import { CartComponent } from './components/cart/cart.component';
 import { ProfileComponent } from './components/profile/profile.component';
 import { CommonModule } from '@angular/common';
 import { AdminComponent } from './components/admin/admin.component';
+import {ToastrModule} from "ngx-toastr";
+import {AdminGuard} from "./helpers/admin-guard";
 
 const routers: Routes = [
   {path: 'header', component: HeaderComponent,},
@@ -30,14 +32,12 @@ const routers: Routes = [
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent },
   { path: 'logout', component: LogoutComponent},
-  { path: 'cart', component: CartComponent, canActivate: [AuthGuard]},
   { path: 'profile/:username', component: ProfileComponent, canActivate: [AuthGuard]},
-  { path: 'admin', component: AdminComponent, canActivate: [AuthGuard]},
+  { path: 'admin', component: AdminComponent, canActivate: [AdminGuard]},
 
   { path: 'caffs', component: CaffListComponent, canActivate: [AuthGuard]},
   { path: 'caff/:id', component: CaffComponent, canActivate: [AuthGuard]},
-  // otherwise redirect to home
-  { path: '**', redirectTo: 'home' }
+  { path: '**', redirectTo: "home"}
 ];
 
 @NgModule({
@@ -65,9 +65,10 @@ const routers: Routes = [
     MatIconModule,
     ReactiveFormsModule,
     MatButtonModule,
-    CommonModule
+    CommonModule,
+    ToastrModule.forRoot(), // ToastrModule added
   ],
-  providers: [authInterceptorProviders, AuthGuard],
+  providers: [authInterceptorProviders, AuthGuard, AdminGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

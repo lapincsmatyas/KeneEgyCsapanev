@@ -7,7 +7,6 @@ import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.cb.model.CAFF;
+import com.example.cb.model.Caff;
 import com.example.cb.model.MyUserDetails;
 import com.example.cb.model.Role;
 import com.example.cb.model.RoleEnum;
@@ -28,7 +27,7 @@ import com.example.cb.payload.CAFFPreview;
 import com.example.cb.payload.MessageResponse;
 import com.example.cb.payload.UserPayload;
 import com.example.cb.repository.RoleRepository;
-import com.example.cb.service.CAFFService;
+import com.example.cb.service.CaffService;
 import com.example.cb.service.UserService;
 
 @RestController
@@ -38,7 +37,7 @@ public class AdminController {
 	@Autowired
 	private UserService userservice;
 	@Autowired
-	private CAFFService caffservice;
+	private CaffService caffservice;
 	@Autowired
 	private RoleRepository roleRepository;
     @Autowired
@@ -135,16 +134,13 @@ public class AdminController {
 	@PutMapping("/caff/{caffid}")//TODO
 	public ResponseEntity<?> updateAdminCAFF(@PathVariable String caffid, @RequestBody CAFFPreview caff){
 		long id = Long.parseLong(caffid);
-		
-		
 		return null;
 	}
 	
-	@DeleteMapping("/caff/{caffid}")
-	public ResponseEntity<MessageResponse> deleteAdminCAFF(@PathVariable String caffid){
-		long id = Long.parseLong(caffid);
+	@DeleteMapping("/caff/{id}")
+	public ResponseEntity<MessageResponse> deleteAdminCAFF(@PathVariable Long id){
 		try {
-			CAFF caff = caffservice.getCAFF(id);
+			Caff caff = caffservice.getCAFFById(id);
 			caffservice.delete(caff);
 			return ResponseEntity.status(HttpStatus.OK).body(new MessageResponse("CAFF was deleted successfully"));
 		} catch (NoSuchElementException e) {

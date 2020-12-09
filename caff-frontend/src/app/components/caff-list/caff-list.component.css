@@ -2,3 +2,25 @@ h1 {
   text-align: center;
   padding-top: 30px;
 }
+
+.card {
+  text-align: center;
+  margin: 1em;
+}
+
+.preview-container{
+  height:80px;
+  text-align: center;
+}
+
+.preview-image{
+  margin: 0 auto;
+  height: 100%;
+  width: auto;
+}
+
+
+.file-upload-container {
+  padding: 2em;
+
+}

@@ -47,10 +47,14 @@ const httpOptions = {
     }
 
     isLoggedIn(): boolean {
-      return !!this.tokenStorage.getToken();
+      return this.getCurrentUser() != null;
     }
 
     getCurrentUser(): User {
       return this.tokenStorage.getUser();
+    }
+
+    isAdmin(): boolean {
+      return this.getCurrentUser()?.roles.includes("ROLE_ADMIN");
     }
   }

@@ -1,5 +1,5 @@
 {
-    "http://localhost:4200/api": {
+    "http://localhost:4200/*": {
       "target": "http://localhost:8080/",
       "secure": true,
       "changeOrigin": true,

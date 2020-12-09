@@ -51,12 +51,12 @@ vector<char> CaffParser::createPixelArray(unsigned int width, unsigned int heigh
 void CaffParser::parseCiff() {
     int header_read_bytes_begin = rf.tellg();
 
-    cout << endl << "*   CIFF   *" << endl;
+    //cout << endl << "*   CIFF   *" << endl;
     char ciff_header_magic[5];
     rf.read((char *) ciff_header_magic, 4);
     ciff_header_magic[4] = '\0';
 
-    cout << "CIFF magic: " << ciff_header_magic << endl;
+    //cout << "CIFF magic: " << ciff_header_magic << endl;
     if (strcmp(ciff_header_magic, "CIFF") != 0) {
         throw invalid_argument("CIFF magic is not CIFF");
     }
@@ -65,25 +65,25 @@ void CaffParser::parseCiff() {
     rf.read((char *) header_size_array, 8);
     unsigned long header_size = byteArrayToLong_8(header_size_array);
 
-    cout << "Size of CIFF header: " << header_size << endl;
+    //cout << "Size of CIFF header: " << header_size << endl;
 
     char content_size_array[8];
     rf.read((char *) content_size_array, 8);
     unsigned long content_size = byteArrayToLong_8(content_size_array);
 
-    cout << "Size of CIFF content: " << content_size << endl;
+    //cout << "Size of CIFF content: " << content_size << endl;
 
     char width_array[8];
     rf.read((char *) width_array, 8);
     unsigned long width = byteArrayToLong_8(width_array);
 
-    cout << "Width of CIFF: " << width << endl;
+    //cout << "WIDTH " << width << endl;
 
     char height_array[8];
     rf.read((char *) height_array, 8);
     unsigned long height = byteArrayToLong_8(height_array);
 
-    cout << "Height of CIFF: " << height << endl;
+    //cout << "HEIGHT " << height << endl;
 
     if ((width * height * 3) != content_size) {
         throw invalid_argument("Invalid content size or width and size given");
@@ -99,19 +99,20 @@ void CaffParser::parseCiff() {
     if (act_char != '\n') {
         throw invalid_argument("Caption does not contain the end character");
     }
-    cout << "Caption of CIFF: " << caption << endl;
+    //cout << "CAPTION " << caption << endl;
 
     string tags;
     rf.read((char *) &act_char, 1);
     while (((int) rf.tellg() - header_read_bytes_begin) < header_size) {
         tags += act_char;
+        if(act_char == '\0') tags += '$';
         rf.read((char *) &act_char, 1);
     }
     if (act_char != '\0') {
         throw invalid_argument("Invalid end of tags");
     }
 
-    cout << "Tags of CIFF: " << tags << endl;
+    //cout << "TAGS " << tags << endl;
 
     int begin = rf.tellg();
     vector<char> temp_array = createPixelArray(width, height);
@@ -134,12 +135,12 @@ void CaffParser::parseCiff() {
 
 //parser for an animation block
 void CaffParser::parseAnimation() {
-    cout << "*   ANIM   *" << endl;
+    //cout << "*   ANIM   *" << endl;
     char duration_array[8];
     rf.read((char *) duration_array, 8);
     unsigned long duration = byteArrayToLong_8(duration_array);
 
-    cout << "Duration of CIFF in milliseconds: " << duration << endl;
+    //cout << "Duration of CIFF in milliseconds: " << duration << endl;
 
     return parseCiff();
 }
@@ -180,7 +181,7 @@ void CaffParser::validateDate(unsigned int year, unsigned int month, unsigned in
 void CaffParser::parseCredits() {
     int begin = rf.tellg();
 
-    cout << "*  CREDITS *" << endl;
+    //cout << "*  CREDITS *" << endl;
 
     //TODO: use unsigned char everywhere
     unsigned char create_Y_array[2];
@@ -207,18 +208,17 @@ void CaffParser::parseCredits() {
 
     validateDate(create_Y, create_M, create_D, create_h, create_m);
 
-    cout << "Date of creation: " << create_Y << "." << create_M << "." << create_D << " " << create_h << ":" << create_m
-         << endl;
+    //cout << "Date of creation: " << create_Y << "." << create_M << "." << create_D << " " << create_h << ":" << create_m << endl;
 
     char creator_length_array[8];
     rf.read((char *) &creator_length_array, 8);
     unsigned long creator_length = byteArrayToLong_8(creator_length_array);
-    cout << "Size of creator name: " << creator_length << endl;
+    //cout << "Size of creator name: " << creator_length << endl;
 
     char creator[creator_length + 1];
     rf.read((char *) creator, creator_length);
     creator[creator_length] = '\0';
-    cout << "Creator of CAFF: " << creator << endl;
+    //cout << "CREATOR " << creator << endl;
 
     int end = rf.tellg();
     if ((end - begin) != (creator_length + 8 + 6)) {
@@ -242,14 +242,14 @@ unsigned long CaffParser::parseHeaderBlock() {
 
     unsigned long read_bytes_data = 0;
 
-    cout << "*  HEADER  *" << endl;
+    //cout << "*  HEADER  *" << endl;
 
     char header_magic[5];
     rf.read((char *) header_magic, 4);
     read_bytes_data += 4;
     header_magic[4] = '\0';
 
-    cout << "Header magic: " << header_magic << endl;
+    //cout << "Header magic: " << header_magic << endl;
 
     if (strcmp(header_magic, "CAFF") != 0) {
         throw invalid_argument("Magic in header was not CAFF");
@@ -259,13 +259,13 @@ unsigned long CaffParser::parseHeaderBlock() {
     rf.read((char *) &header_size_array, 8);
     read_bytes_data += 8;
     unsigned long header_size = byteArrayToLong_8(header_size_array);
-    cout << "Size of header: " << header_size << endl;
+    //cout << "Size of header: " << header_size << endl;
 
     char num_anim_array[8];
     rf.read((char *) &num_anim_array, 8);
     read_bytes_data += 8;
     unsigned long num_anim = byteArrayToLong_8(num_anim_array);
-    cout << "Number of CIFFs in animation: " << num_anim << endl;
+    //cout << "Number of CIFFs in animation: " << num_anim << endl;
 
     if (read_bytes_data != block_length) {
         throw invalid_argument("Size of header block was not the number of bytes read");
@@ -296,7 +296,7 @@ int CaffParser::parseBlock(int index, bool credits_read) {
     unsigned long block_length = byteArrayToLong_8(block_length_array);
     //TODO: check if block_length number of bytes were read before next block
 
-    cout << endl << "Reading block with id: " << block_id << ", and size: " << block_length << " :" << endl;
+    // cout << endl << "Reading block with id: " << block_id << ", and size: " << block_length << " :" << endl;
 
     switch ((int) block_id) {
         case 2:
