@@ -12,12 +12,6 @@ import {ActivatedRoute} from "@angular/router";
 export class ProfileComponent implements OnInit {
 
   user: User;
-
-  userName: string;
-  email: string;
-
-  edit = false;
-
   constructor(public userService: UserService,
               private authService: AuthService,
               private route: ActivatedRoute
@@ -28,26 +22,8 @@ export class ProfileComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.userService.getUserData(params['username']).subscribe(result => {
         this.user = result;
-        this.userName = this.user.username;
-        this.email = this.user.email;
       });
     });
 
-  }
-
-  toggleEdit() {
-    this.edit = !this.edit;
-  }
-
-  saveData(){
-    if(this.userName != this.user.username){
-      if(confirm("Felhasználónév változtatásakor újra be kell jelentkezned. Biztosan megváltoztatod a felhasználóneved?")) {
-        this.user.username = this.userName;
-        this.user.email = this.email;
-        this.userService.changeUserData(this.user).subscribe(result =>{
-          this.authService.logout();
-        })
-      }
-    }
   }
 }

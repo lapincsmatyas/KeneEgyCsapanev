@@ -19,7 +19,7 @@ public class Caff {
 
     private String tags;
 
-    @OneToMany(mappedBy = "caff")
+    @OneToMany(mappedBy = "caff", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
 
     @OneToOne()

@@ -1,21 +1,29 @@
-<div *ngIf="caff" class="caff">
-  Id: {{caff.id}}<br/>
-  Name: {{caff.name}}<br/>
-  <div *ngIf="!caff.preview" class="spinner-border" role="status">
-    <span class="sr-only">Loading...</span>
+<div class="caff-container container">
+  <div *ngIf="!caff">
+    <div class="spinner-border" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
   </div>
-  <img *ngIf="caff.preview" class="preview-image" [src]="caff.preview" alt="Preview of caff"/>
-  <p>Comments:</p>
-  <ul>
-    <li *ngFor="let comment of caff.comments">
-      Id: {{comment.id}}<br/>
-      User: {{comment.userName}}<br/>
-      Comment: {{comment.comment}}<br/>
-    </li>
-  </ul>
-  <input type="text" [(ngModel)]="comment.comment" placeholder="Write a comment: ">
-    <button class="btn btn-success" (click)="addComment()">Add comment</button>
-    <br/>
-  <button class="btn btn-success" (click)="downloadCaff()">Download</button>
-  <br/>
+  <div *ngIf="caff" class="caff">
+    <h1 class="h1">{{caff.name}}</h1>
+
+    <button class="btn btn-success" (click)="downloadCaff()">Download CAFF</button>
+    <button *ngIf="authService.isAdmin()" class="btn btn-danger ml-1" (click)="deleteCaff()">Delete CAFF</button><br/>
+    <div *ngIf="!caff.preview" class="spinner-border" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+
+    <img *ngIf="caff.preview" class="preview-image" [src]="caff.preview" alt="Preview of caff"/>
+    <h3 class="mt-2 mb-0"><strong>Comments</strong></h3>
+      <div class="comment" *ngFor="let comment of caff.comments">
+        User: <strong>{{comment.userName}}</strong><br/>
+        Comment: {{comment.comment}}<br/>
+        <button *ngIf="authService.isAdmin()" class="btn btn-danger mb-1" (click)="deleteComment(comment)">Delete comment</button>
+      </div>
+    <input class="form-control comment-text mt-4" type="text" [(ngModel)]="comment.comment" placeholder="Write a comment...">
+    <button class="btn btn-info add-button" (click)="addComment()">Add comment</button>
+
+  </div>
+
 </div>
+

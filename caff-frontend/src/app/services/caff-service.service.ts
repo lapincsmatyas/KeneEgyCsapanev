@@ -43,4 +43,12 @@ export class CaffService implements OnInit{
   downloadCaff(id: number): Observable<Blob> {
     return this.http.get(environment.authUrl + `/caff/${id}/download`, { responseType: 'blob' });
   }
+
+  deleteCaff(id: number) {
+    return this.http.delete(environment.authUrl + `/admin/caff/${id}`);
+  }
+
+  deleteComment(id: number) {
+    return this.http.delete(environment.authUrl + `/admin/caff/comment/${id}`);
+  }
 }

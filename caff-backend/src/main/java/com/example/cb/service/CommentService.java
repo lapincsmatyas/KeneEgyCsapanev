@@ -13,4 +13,12 @@ public class CommentService {
 	public Comment persistComment(Comment comment){
 		return commentRepository.save(comment);
 	}
+
+    public Comment getCommentById(Long id) {
+		return this.commentRepository.getOne(id);
+    }
+
+    public void removeComment(Comment comment){
+		this.commentRepository.delete(comment);
+	}
 }

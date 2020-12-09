@@ -50,11 +50,13 @@ const httpOptions = {
       return this.getCurrentUser() != null;
     }
 
-    getCurrentUser(): User {
+    getCurrentUser() {
       return this.tokenStorage.getUser();
     }
 
     isAdmin(): boolean {
-      return this.getCurrentUser()?.roles.includes("ROLE_ADMIN");
+      if(this.getCurrentUser())
+        return this.getCurrentUser()?.roles.includes("ROLE_ADMIN");
+      return false;
     }
   }

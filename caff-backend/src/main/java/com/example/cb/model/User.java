@@ -1,7 +1,7 @@
 package com.example.cb.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import javax.persistence.*;
 
 import lombok.Getter;
@@ -27,7 +27,7 @@ public class User {
 	@JoinTable(	name = "user_role",
 			joinColumns = @JoinColumn(name = "user_id"),
 			inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private List<Role> roles = new ArrayList<Role>();
+	private Set<Role> roles = new HashSet<>();
 
 	public User() {}
 
@@ -77,16 +77,16 @@ public class User {
 		this.password = password;
 	}
 
-	public List<Role> getRoles() {
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
+
+	public Set<Role> getRoles() {
 		return roles;
 	}
 
-    public void setRoles(List<Role> roles) {
-    	this.roles = roles;
-    }
-    
-    public List<String> getStrRoles(){
-    	List<String> list = new ArrayList<String>();
+    public Set<String> getStrRoles(){
+    	Set<String> list = new HashSet<>();
     	for(Role r : roles) {
     		if(r.getRole().equals(RoleEnum.ROLE_ADMIN)) list.add("admin");
     		else if (r.getRole().equals(RoleEnum.ROLE_USER)) list.add("user");

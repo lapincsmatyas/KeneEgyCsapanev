@@ -1,17 +1,11 @@
-<div>
-  <div class="form-group">
-    <label for="username">Felhaszánlónév</label>
-    <input type="text" class="form-control" id="username" [disabled]="!edit"
-           required
-           [(ngModel)]="userName" name="username">
+<div class="container text-center">
+  <div class="user" *ngIf="user">
+    <h1 class="font-weight-bold mt-2">Profile</h1>
+    <img class="image" src="../../../assets/missing.png"/>
+    <p><strong>Username:</strong> {{user.username}}</p>
+    <p><strong>Email:</strong> {{user.email}}</p>
   </div>
-
-  <div class="form-group">
-    <label for="email">Email cím</label>
-    <input type="text" class="form-control" id="email" [disabled]="!edit"
-           [(ngModel)]="email" name="email">
-  </div>
+  <span *ngIf="!user" class="spinner-border" role="status">
+    <span class="sr-only">Loading...</span>
+  </span>
 </div>
-
-<button *ngIf="!edit" (click)="toggleEdit()" class="btn btn-info">Szerkesztés</button>
-<button *ngIf="edit" (click)="saveData()" class="btn btn-success">Mentés</button>

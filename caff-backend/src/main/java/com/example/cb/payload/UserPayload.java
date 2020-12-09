@@ -1,6 +1,7 @@
 package com.example.cb.payload;
 
 import java.util.List;
+import java.util.Set;
 
 import com.example.cb.model.Role;
 
@@ -9,9 +10,9 @@ public class UserPayload {
 	private String username;
 	private String email;
 	private String password;
-	private List<String> roles;
+	private Set<String> roles;
 	
-	public UserPayload(long user_id, String username, String email, String password, List<String> roles) {
+	public UserPayload(long user_id, String username, String email, String password, Set<String> roles) {
 		this.user_id = user_id;
 		this.username = username;
 		this.email = email;
@@ -51,11 +52,11 @@ public class UserPayload {
 		this.password = password;
 	}
 
-	public List<String> getRoles() {
+	public Set<String> getRoles() {
 		return roles;
 	}
 
-	public void setRoles(List<String> roles) {
+	public void setRoles(Set<String> roles) {
 		this.roles = roles;
 	}
 }

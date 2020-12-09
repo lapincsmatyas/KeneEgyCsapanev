@@ -15,7 +15,15 @@ export class UserService {
     return this.http.get<User>(`${environment.apiUrl}/user/${username}`);
   }
 
-  changeUserData(user: User) {
-    return new Observable<null>();
+  getAllUsers(): Observable<User[]>{
+    return this.http.get<User[]>(`${environment.apiUrl}/admin/user`);
+  }
+
+  makeAdmin(id: number) {
+    return this.http.get<User>(`${environment.apiUrl}/admin/user/${id}/admin`);
+  }
+
+  revokeAdmin(id: number) {
+    return this.http.delete<User>(`${environment.apiUrl}/admin/user/${id}/admin`);
   }
 }

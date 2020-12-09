@@ -22,7 +22,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -58,10 +60,9 @@ public class AuthService {
 
         //TODO: admin function
         //set the roles
-        List<Role> roles = new ArrayList<>();
+        Set<Role> roles = new HashSet<>();
         roles.add(roleRepository.findByName(RoleEnum.ROLE_USER).orElseThrow(()->new RuntimeException("Roles not found")));
 
-        //give the role to the user and save it
         user.setRoles(roles);
         userRepository.save(user);
 

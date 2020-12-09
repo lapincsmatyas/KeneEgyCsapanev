@@ -6,6 +6,8 @@ import {HttpErrorResponse, HttpEventType} from "@angular/common/http";
 import {of} from "rxjs";
 import {DomSanitizer} from "@angular/platform-browser";
 import {ToastrService} from "ngx-toastr";
+import {AuthService} from "../../services/auth.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-caff-list',
@@ -17,7 +19,11 @@ export class CaffListComponent implements OnInit {
   private fileToUpload: File = null;
   public uploading = false;
 
-  constructor(private caffService: CaffService, private sanitizer: DomSanitizer, private toastr: ToastrService) {
+  constructor(private caffService: CaffService,
+              private sanitizer: DomSanitizer,
+              private router: Router,
+              private toastr: ToastrService,
+              public authService: AuthService) {
   }
 
   ngOnInit(): void {
@@ -57,5 +63,15 @@ export class CaffListComponent implements OnInit {
 
   handleFileInput(files: FileList) {
     this.fileToUpload = files.item(0);
+    this.uploadFile();
+  }
+
+  deleteCaff(caff: Caff) {
+    this.caffService.deleteCaff(caff.id).subscribe( result => {
+      this.toastr.success("Successfully deleted CAFF");
+      this.ngOnInit();
+    }, error => {
+      this.toastr.error("Something went wrong deleting the CAFF");
+    })
   }
 }

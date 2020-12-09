@@ -7,7 +7,7 @@ public class LoginResponse {
 
     private final String jwt;
     private final String type = "Bearer";
-    private final Long id;
+    private final Long user_id;
     private final String username;
     private final String email;
     private final List<String> roles;
@@ -17,7 +17,7 @@ public class LoginResponse {
 
     public LoginResponse(String jwt, Long id, String username, String email, List<String> roles) {
         this.jwt = jwt;
-        this.id = id;
+        this.user_id = id;
         this.username = username;
         this.email = email;
         this.roles = roles;
@@ -31,8 +31,8 @@ public class LoginResponse {
         return type;
     }
 
-    public Long getId() {
-        return id;
+    public Long getUser_id() {
+        return user_id;
     }
 
     public String getUsername() {

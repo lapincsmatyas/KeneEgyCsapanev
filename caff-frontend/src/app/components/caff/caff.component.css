@@ -1,5 +1,10 @@
 .caff {
   margin: 30px;
+  text-align: center;
+}
+
+.caff-container{
+  text-align: center;
 }
 
 button {
@@ -8,4 +13,20 @@ button {
 
 .preview-image{
   max-width: 300px;
+}
+
+.comment {
+  width: 40%;
+  margin: 1em auto;
+  background-color: aliceblue;
+}
+
+.comment-text {
+  width: 40%;
+  margin: 1em auto;
+  margin-bottom: 0;
+}
+
+.add-button {
+  margin-top: 0.5em;
 }

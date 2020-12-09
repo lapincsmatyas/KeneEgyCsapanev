@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {CaffService} from "../../services/caff-service.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Caff} from "../../models/caff";
 import {CartService} from "../../services/cart.service";
 import {Comment} from 'src/app/models/comment';
@@ -23,8 +23,9 @@ export class CaffComponent implements OnInit {
 
   constructor(private caffService: CaffService,
               private cartService: CartService,
+              private router: Router,
               private route: ActivatedRoute,
-              private authService: AuthService,
+              public authService: AuthService,
               private sanitizer: DomSanitizer,
               private toastr: ToastrService
   ) {
@@ -62,5 +63,23 @@ export class CaffComponent implements OnInit {
         this.toastr.error("Something went wrong downloading the image :(");
       }
     );
+  }
+
+  deleteCaff() {
+    this.caffService.deleteCaff(this.caff.id).subscribe( result => {
+      this.toastr.success("Successfully deleted CAFF");
+      this.router.navigateByUrl("/caffs");
+    }, error => {
+      this.toastr.error("Something went wrong deleting the CAFF");
+    })
+  }
+
+  deleteComment(comment: Comment) {
+    this.caffService.deleteComment(comment.id).subscribe( result => {
+      this.toastr.success("Successfully deleted comment");
+      this.ngOnInit();
+    }, error => {
+      this.toastr.error("Something went wrong deleting the CAFF");
+    })
   }
 }

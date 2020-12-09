@@ -1,11 +1,12 @@
+<h1>Users</h1>
 <div class="col-md-12">
-  <h1>Users</h1>
   <ul class="list-group list-group-flush col-md-10">
     <li *ngFor="let user of users" class="list-group-item">
       <div class="row">
         <h2 class="col-md-6 my-auto">{{user.username}}</h2>
         <div class="col-md-4 my-auto">
-          <a class="btn btn-primary float-right" [routerLink]="['/profile', user.username]">Edit</a>
+          <a class="btn btn-primary float-right ml-1" *ngIf="!isAdmin(user)" (click)="makeAdmin(user)">Grant admin role</a>
+          <a class="btn btn-danger float-right" *ngIf="isAdmin(user) && notMe(user)" (click)="revokeAdmin(user)">Revoke admin role</a  >
         </div>
       </div>
     </li>
