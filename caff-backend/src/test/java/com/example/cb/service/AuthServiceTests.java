@@ -1,4 +1,4 @@
-package com.example.caffbackend.service;
+package com.example.cb.service;
 
 import com.example.cb.CaffBackendApplication;
 import com.example.cb.model.Role;
