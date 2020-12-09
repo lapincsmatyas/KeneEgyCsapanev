@@ -123,7 +123,7 @@ public class CaffService {
         }
     }
 
-    public Caff getCAFFById(Long id) {
+    public Caff getCAFFById(long id) {
         return caffRepository.findById(id).get();
     }
 
@@ -137,7 +137,7 @@ public class CaffService {
         return commentRepository.save(comment);
     }
 
-    public byte[] getPreviewOfCaff(Long id) {
+    public byte[] getPreviewOfCaff(long id) {
         return caffRepository.findById(id).get().getPreviewFile();
     }
 
