@@ -124,7 +124,7 @@ public class CaffService {
     }
 
     public Caff getCAFFById(long id) {
-        return caffRepository.findById(id);
+        return caffRepository.findById(id).get();
     }
 
     public Caff persistCAFF(Caff caff) {
@@ -138,7 +138,7 @@ public class CaffService {
     }
 
     public byte[] getPreviewOfCaff(long id) {
-        return caffRepository.findById(id).getPreviewFile();
+        return caffRepository.findById(id).get().getPreviewFile();
     }
 
     public List<CaffWithoutData> getAllCAFFWithoutData() {

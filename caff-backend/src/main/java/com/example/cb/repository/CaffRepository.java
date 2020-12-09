@@ -7,5 +7,5 @@ import com.example.cb.model.Caff;
 
 @Repository
 public interface CaffRepository extends JpaRepository<Caff, Long> {
-	public Caff findById(long id);
+	
 }

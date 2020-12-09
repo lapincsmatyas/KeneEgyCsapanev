@@ -14,6 +14,8 @@ import com.example.cb.controller.*;
 import com.example.cb.model.*;
 import com.example.cb.payload.*;
 import com.example.cb.repository.*;
+import com.example.cb.util.Md5Generator;
+
 import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -25,6 +27,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @SpringBootTest
 public class CaffServiceTests {
@@ -85,8 +89,9 @@ public class CaffServiceTests {
 	@Test
 	void testGetPreviewOfCaff() {
 		byte[] caffPreview = new byte[0];
-		caff.setPreviewFile(caffPreview);
-		when(caffRepo.findById(anyLong())).thenReturn(caff);
+		Optional<Caff> ocaff = Optional.of(new Caff());
+		ocaff.get().setPreviewFile(caffPreview);
+		when(caffRepo.findById(anyLong())).thenReturn(ocaff);
 		byte[] responseCaffPreview = caffService.getPreviewOfCaff(1);
 		assertEquals(caffPreview, responseCaffPreview);
 	}
@@ -102,13 +107,27 @@ public class CaffServiceTests {
 	
 	@Test
 	void testGetCaffFileById() {
+		Optional<Caff> ocaff = Optional.of(new Caff());
 		CaffFile caffFile = new CaffFile();
 		byte[] caffFileData = new byte[0];
 		caffFile.setData(caffFileData);
-		caff.setFile(caffFile);
-		when(caffRepo.findById(anyLong())).thenReturn(caff);
+		ocaff.get().setFileMd5(Md5Generator.getMd5OfByteArray(caffFileData));
+		ocaff.get().setFile(caffFile);
+		when(caffRepo.findById(anyLong())).thenReturn(ocaff);
 		byte[] responseData = caffService.getCaffFileById("1");
 		assertEquals(caffFileData, responseData);
+	}
+	
+	@Test
+	void testGetCaffFileByIdHashChanged() {
+		Optional<Caff> ocaff = Optional.of(new Caff());
+		CaffFile caffFile = new CaffFile();
+		byte[] caffFileData = new byte[0];
+		caffFile.setData(caffFileData);
+		ocaff.get().setFileMd5("");
+		ocaff.get().setFile(caffFile);
+		when(caffRepo.findById(anyLong())).thenReturn(ocaff);
+		Assertions.assertThrows(SecurityException.class, ()->caffService.getCaffFileById("1"));
 	}
 	
 	@Test
@@ -121,16 +140,15 @@ public class CaffServiceTests {
 	
 	@Test
 	void testGetCAFFById() {
-		when(caffRepo.findById(anyLong())).thenReturn(caff);
+		Optional<Caff> ocaff = Optional.of(new Caff());
+		when(caffRepo.findById(anyLong())).thenReturn(ocaff);
 		Caff foundCaff = caffService.getCAFFById(1);
-		assertEquals(caff, foundCaff);
+		assertEquals(ocaff.get(), foundCaff);
 	}
 	
 	@Test
 	void testGetCAFFByWrongId() {
-		when(caffRepo.findById(anyLong())).thenReturn(null);
-		Caff foundCaff=caffService.getCAFFById(1);
-		assertNull(foundCaff);
+		Assertions.assertThrows(NoSuchElementException.class, ()->caffRepo.findById(null).get());
 	}
 	
 	@Test
@@ -144,10 +162,9 @@ public class CaffServiceTests {
 	
 	@Test
 	void testDeleteCAFF() {
-		when(caffRepo.findById(anyLong())).thenReturn(null);
+		//when(caffRepo.findById(anyLong())).thenReturn(null);
 		caffService.delete(caff);
-		Caff foundCaff = caffService.getCAFFById(1);
-		assertNull(foundCaff);
+		Assertions.assertThrows(NoSuchElementException.class, ()->caffRepo.findById(caff.getId()).get());
 	}
 	
 	@Test
