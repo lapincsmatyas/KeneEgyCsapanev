@@ -32,12 +32,12 @@ const routers: Routes = [
   { path: 'login', component: LoginComponent},
   { path: 'register', component: RegisterComponent },
   { path: 'logout', component: LogoutComponent},
-  //{ path: 'cart', component: CartComponent, canActivate: [AuthGuard]},
   { path: 'profile/:username', component: ProfileComponent, canActivate: [AuthGuard]},
   { path: 'admin', component: AdminComponent, canActivate: [AdminGuard]},
 
   { path: 'caffs', component: CaffListComponent, canActivate: [AuthGuard]},
-  { path: 'caff/:id', component: CaffComponent, canActivate: [AuthGuard]}
+  { path: 'caff/:id', component: CaffComponent, canActivate: [AuthGuard]},
+  { path: '**', redirectTo: "home"}
 ];
 
 @NgModule({

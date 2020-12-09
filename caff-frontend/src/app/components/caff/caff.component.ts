@@ -21,7 +21,6 @@ export class CaffComponent implements OnInit {
   caff: Caff;
   comment: Comment = new Comment();
 
-
   constructor(private caffService: CaffService,
               private cartService: CartService,
               private route: ActivatedRoute,
